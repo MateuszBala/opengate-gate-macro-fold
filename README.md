@@ -73,6 +73,41 @@ make test
 make check
 ```
 
+### Pre-commit setup
+
+You can install and activate `pre-commit` in two supported ways.
+
+#### Option A (recommended): use `uv` in this repository
+
+```bash
+uv add --dev pre-commit
+uv sync
+uv run pre-commit install --hook-type pre-commit
+```
+
+Optional one-time verification on all files:
+
+```bash
+uv run pre-commit run --all-files
+```
+
+#### Option B: install `pre-commit` from Debian packages
+
+```bash
+sudo apt update
+sudo apt install -y pre-commit
+pre-commit --version
+pre-commit install --hook-type pre-commit
+```
+
+Optional one-time verification on all files:
+
+```bash
+pre-commit run --all-files
+```
+
+The configured hook runs `make check` before each commit and blocks the commit if validation fails.
+
 Project conventions and contribution standards:
 
 - [Coding conventions](docs/CODING_CONVENTIONS.md)
