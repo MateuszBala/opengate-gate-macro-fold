@@ -2,7 +2,7 @@
 # ABOUT: Project helper tasks: installation, validation, and worktree
 #        management for feature branches created from develop.
 # USAGE:
-#   make init | install | test | lint | format | typecheck | check
+#   make init | install | install-user | test | lint | format | typecheck | check
 #   make worktree BRANCH_NAME=feature/description
 #   make switch-to-worktree BRANCH_NAME=feature/description
 
@@ -12,14 +12,23 @@ SHELL := /bin/bash
 WORKTREE_ROOT ?= ../worktrees
 WORKTREE_LOCKS_DIR ?= .tmp/worktree-locks
 
-.PHONY: init install test lint format typecheck check worktree switch-to-worktree
+.PHONY: init install install-user test lint format typecheck check worktree switch-to-worktree
 
 # Install dependencies and create the virtual environment (uv).
 init:
 	uv sync
 
-# Alias for dependency installation.
+# Install project dependencies and package into the local .venv.
 install: init
+	@echo "Installed in local virtual environment: .venv"
+	@echo "Run via uv: uv run opengate-gate-macro-fold --help"
+	@echo "Or activate the environment: source .venv/bin/activate"
+
+# Install the package for the current user (outside project .venv).
+install-user:
+	python3 -m pip install --user -e .
+	@echo "Installed in user site-packages (--user)."
+	@echo "If needed, add ~/.local/bin to PATH."
 
 # Run the full test suite.
 test:
