@@ -1,6 +1,6 @@
 [project]
 name = "opengate-gate-macro-fold"
-version = "0.1.1"
+version = "0.1.2"
 description = "Folding and unfolding GATE 9 macros - from mono macro to set of macros and vice versa"
 readme = "README.md"
 requires-python = ">=3.11"
