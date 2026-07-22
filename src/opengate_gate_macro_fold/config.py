@@ -27,8 +27,8 @@ class RunConfig:
         Path to the mono macro file to split into a set of macro files.
     input_macros_dir : Path
         Path to the directory with macro files to combine into one mono macro file.
-    output_dir : Path
-        Path to the directory where outputs will be written.
+    output_dir : Path | None
+        Optional path to the directory where outputs will be written.
     title : str | None
         Optional mono macro title.
     """
@@ -37,5 +37,5 @@ class RunConfig:
     unfold: bool
     input_mono_macro_file: Path | None
     input_macros_dir: Path | None
-    output_dir: Path
+    output_dir: Path | None
     title: str | None = None

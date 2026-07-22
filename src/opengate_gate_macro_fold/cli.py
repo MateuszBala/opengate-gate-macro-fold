@@ -33,7 +33,6 @@ class _PolishArgumentParser(argparse.ArgumentParser):
         self.exit(2, f"{self.prog}: error: {message}\n")
 
 
-
 def build_parser() -> argparse.ArgumentParser:
     """Build the command-line argument parser.
 
@@ -103,8 +102,10 @@ def main(argv: list[str] | None = None) -> int:
     logger = get_logger(__name__)
 
     try:
-        config = _config_from_args(args)
-        output_path = None  # Placeholder for the actual processing function that returns the output path or directory.
+        _config_from_args(args)
+        # Placeholder for the actual processing function that returns
+        # the output path or output directory.
+        output_path = None
     except (FileNotFoundError, ValueError) as error:
         logger.error("Error: %s", error)
         return 1
@@ -130,8 +131,10 @@ def _config_from_args(args: argparse.Namespace) -> RunConfig:
     return RunConfig(
         fold=args.fold,
         unfold=args.unfold,
-        input_mono_macro_file=Path(args.input_mono_macro_file) if args.input_mono_macro_file else None,
+        input_mono_macro_file=(
+            Path(args.input_mono_macro_file) if args.input_mono_macro_file else None
+        ),
         input_macros_dir=Path(args.input_macros_dir) if args.input_macros_dir else None,
         output_dir=Path(args.output_dir) if args.output_dir else None,
-        title=args.title
+        title=args.title,
     )
