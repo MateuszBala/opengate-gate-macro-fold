@@ -25,7 +25,6 @@ Repository = "https://github.com/MateuszBala/opengate-gate-macro-fold"
 
 [project.scripts]
 opengate-gate-macro-fold = "opengate_gate_macro_fold.cli:main"
-cspae = "opengate_gate_macro_fold.cli:main"
 
 [build-system]
 requires = ["hatchling"]

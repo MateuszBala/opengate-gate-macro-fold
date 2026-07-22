@@ -1,8 +1,8 @@
 """Package command-line interface.
 
 The module defines the entry point used by ``python -m
-opengate_gate_macro_fold`` and the console scripts
-``opengate-gate-macro-fold`` i ``cspae``.
+opengate_gate_macro_fold`` and the ``opengate-gate-macro-fold``
+console script.
 
 Public functions
 ----------------
