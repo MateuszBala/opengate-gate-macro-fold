@@ -3,8 +3,8 @@
 #        management for feature branches created from develop.
 # USAGE:
 #   make init | install | test | lint | format | typecheck | check
-#   make worktree BRANCH_NAME=feature/opis
-#   make switch-to-worktree BRANCH_NAME=feature/opis
+#   make worktree BRANCH_NAME=feature/description
+#   make switch-to-worktree BRANCH_NAME=feature/description
 
 SHELL := /bin/bash
 
