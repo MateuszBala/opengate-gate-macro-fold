@@ -1,3 +1,4 @@
+
 /gate/source/addSource                        upperinterior_hot_background PositroniumSource
 /gate/source/upperinterior_hot_background/gps/pos/centre     0.0 -3.5 0.0 cm
 /gate/source/upperinterior_hot_background/gps/pos/type       Volume
@@ -359,3 +360,4 @@
 
 
 /gate/source/list
+

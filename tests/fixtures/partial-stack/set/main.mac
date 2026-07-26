@@ -26,6 +26,10 @@
 
 # END EXECUTE source.mac
 
+
+#  D A T A   O U T P U T
+# BEGIN EXECUTE output.mac
+
 /control/execute output.mac
 
 # END EXECUTE output.mac

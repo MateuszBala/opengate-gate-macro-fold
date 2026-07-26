@@ -103,21 +103,175 @@ def test_parser_error_message_uses_english_error_prefix(
     assert "error:" in capsys.readouterr().err
 
 
-def test_main_returns_one_when_processing_placeholder_returns_none(
-    monkeypatch: pytest.MonkeyPatch,
+def test_main_returns_one_when_neither_fold_nor_unfold_specified(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    """main should return 1 while processing placeholder returns no output path."""
+    """main should reject a configuration where fold and unfold are both False."""
     # Arrange
     logger = _DummyLogger()
     monkeypatch.setattr(cli, "configure_logging", lambda: None)
     monkeypatch.setattr(cli, "get_logger", lambda _name: logger)
 
     # Act
-    exit_code = cli.main(["--output-dir", "out"])
+    exit_code = cli.main(["--output-dir", str(tmp_path)])
 
     # Assert
     assert exit_code == 1
-    assert logger.errors == ["No output path returned from processing."]
+    assert logger.errors == ["Error: Exactly one of --fold or --unfold must be specified."]
+
+
+def test_main_returns_one_when_both_fold_and_unfold_specified(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """main should reject a configuration where fold and unfold are both True."""
+    # Arrange
+    logger = _DummyLogger()
+    monkeypatch.setattr(cli, "configure_logging", lambda: None)
+    monkeypatch.setattr(cli, "get_logger", lambda _name: logger)
+
+    # Act
+    exit_code = cli.main(["--fold", "--unfold", "--output-dir", str(tmp_path)])
+
+    # Assert
+    assert exit_code == 1
+    assert logger.errors == ["Error: Exactly one of --fold or --unfold must be specified."]
+
+
+def test_main_unfolds_mono_macro_file_into_set_of_macro_files(tmp_path: Path) -> None:
+    """main should split a mono macro file into main.mac and its block files."""
+    # Arrange
+    mono_path = tmp_path / "macro.mac"
+    mono_path.write_text(
+        "# BEGIN EXECUTE detector.mac\n"
+        "/gate/geometry/setMaterialDatabase GateMaterials.db\n"
+        "# END EXECUTE detector.mac\n",
+        encoding="utf-8",
+    )
+    output_dir = tmp_path / "out"
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--unfold",
+            "--input-mono-macro-file",
+            str(mono_path),
+            "--output-dir",
+            str(output_dir),
+        ]
+    )
+
+    # Assert
+    assert exit_code == 0
+    assert (output_dir / "detector.mac").read_text(encoding="utf-8") == (
+        "/gate/geometry/setMaterialDatabase GateMaterials.db\n"
+    )
+    main_content = (output_dir / "main.mac").read_text(encoding="utf-8")
+    assert "/control/execute detector.mac" in main_content
+
+
+def test_main_folds_set_of_macro_files_into_mono_macro_file(tmp_path: Path) -> None:
+    """main should combine main.mac and its block files into a mono macro file."""
+    # Arrange
+    macros_dir = tmp_path / "macros"
+    macros_dir.mkdir()
+    (macros_dir / "main.mac").write_text(
+        "# BEGIN EXECUTE detector.mac\n"
+        "\n"
+        "/control/execute detector.mac\n"
+        "\n"
+        "# END EXECUTE detector.mac\n",
+        encoding="utf-8",
+    )
+    (macros_dir / "detector.mac").write_text(
+        "/gate/geometry/setMaterialDatabase GateMaterials.db\n",
+        encoding="utf-8",
+    )
+    output_dir = tmp_path / "out"
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(macros_dir),
+            "--output-dir",
+            str(output_dir),
+            "--title",
+            "example",
+        ]
+    )
+
+    # Assert
+    assert exit_code == 0
+    assert (output_dir / "example.mac").read_text(encoding="utf-8") == (
+        "# BEGIN EXECUTE detector.mac\n"
+        "/gate/geometry/setMaterialDatabase GateMaterials.db\n"
+        "# END EXECUTE detector.mac\n"
+    )
+
+
+def test_main_folds_without_title_uses_default_mono_file_name(tmp_path: Path) -> None:
+    """main should name the folded mono file 'mono.mac' when --title is not given."""
+    # Arrange
+    macros_dir = tmp_path / "macros"
+    macros_dir.mkdir()
+    (macros_dir / "main.mac").write_text(
+        "# BEGIN EXECUTE detector.mac\n"
+        "\n"
+        "/control/execute detector.mac\n"
+        "\n"
+        "# END EXECUTE detector.mac\n",
+        encoding="utf-8",
+    )
+    (macros_dir / "detector.mac").write_text(
+        "/gate/geometry/setMaterialDatabase GateMaterials.db\n", encoding="utf-8"
+    )
+    output_dir = tmp_path / "out"
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(macros_dir),
+            "--output-dir",
+            str(output_dir),
+        ]
+    )
+
+    # Assert
+    assert exit_code == 0
+    assert (output_dir / "mono.mac").exists()
+
+
+def test_main_returns_one_when_main_macro_file_is_missing(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """main should reject a --fold input directory without a main.mac file."""
+    # Arrange
+    logger = _DummyLogger()
+    monkeypatch.setattr(cli, "configure_logging", lambda: None)
+    monkeypatch.setattr(cli, "get_logger", lambda _name: logger)
+    macros_dir = tmp_path / "macros"
+    macros_dir.mkdir()
+    (macros_dir / "detector.mac").write_text(
+        "/gate/geometry/setMaterialDatabase GateMaterials.db\n", encoding="utf-8"
+    )
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(macros_dir),
+            "--output-dir",
+            str(tmp_path / "out"),
+        ]
+    )
+
+    # Assert
+    assert exit_code == 1
+    assert logger.errors == [f"Error: No 'main.mac' file found in '{macros_dir}'."]
 
 
 def test_main_returns_one_when_config_build_raises_value_error(

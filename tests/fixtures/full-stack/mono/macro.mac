@@ -692,8 +692,6 @@
 
 #  P A R T I C L E   S O U R C E
 # BEGIN EXECUTE source.mac
-#  NEMA IEC 2001 IQ SOURCE GAMMA
-
 /gate/source/addSource                        upperinterior_hot_background PositroniumSource
 /gate/source/upperinterior_hot_background/gps/pos/centre     0.0 -3.5 0.0 cm
 /gate/source/upperinterior_hot_background/gps/pos/type       Volume

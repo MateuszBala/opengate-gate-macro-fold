@@ -2,3 +2,4 @@
 /gate/application/setTimeStart   0 s
 /gate/application/setTimeStop    1.0 s
 /gate/application/startDAQ
+
