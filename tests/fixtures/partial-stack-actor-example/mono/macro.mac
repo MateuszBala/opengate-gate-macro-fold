@@ -1,0 +1,215 @@
+#==========================================================================================
+# VISUALIZATION
+# Description: Because for simulation there is no point in displaying the image, 
+# we do not call the file Visualization.mac
+# If you want to see how particles propagation looks line you can replace "/vis/disable"
+# with:
+#
+# /vis/enable
+# /control/execute Visualization.mac
+#
+# But remember to decrease number of generated events to few e.g. 100
+#==========================================================================================
+
+/vis/disable
+
+#==========================================================================================
+# GEOMETRY
+# Description: Geometry.mac file describes detector geometry
+#==========================================================================================
+
+/gate/geometry/setMaterialDatabase    GateMaterials.db
+
+#==========================================================================================
+# Simulation world description
+# Below: simulation world as cube with a side length equal 300 cm
+#==========================================================================================
+
+/gate/world/geometry/setXLength 300. cm
+/gate/world/geometry/setYLength 300. cm
+/gate/world/geometry/setZLength 300. cm
+/gate/world/vis/setVisible 1 #To hide world's frame please set 0
+
+
+#==========================================================================================
+# Detector geometry
+# Below: Cylindrical detector (with name "detector") with inner radius equal 50 cm 
+# and outer radius equal 52 cm. Heights of this detector is 60 cm.
+#==========================================================================================
+
+/gate/world/daughters/name detector
+/gate/world/daughters/systemType scanner
+/gate/world/daughters/insert cylinder
+/gate/detector/setMaterial EJ230 
+/gate/detector/geometry/setRmin 50 cm
+/gate/detector/geometry/setRmax 52 cm
+/gate/detector/geometry/setHeight 60 cm
+/gate/detector/vis/setVisible 1 #To hide world's frame please set 0
+
+#==========================================================================================
+# PHYSICS
+# Description: Physics.mac file describes which physics processes include in simulation
+#==========================================================================================
+
+#==========================================================================================
+# Compton scattering for gamma
+#==========================================================================================
+
+/gate/physics/addProcess Compton gamma
+/gate/physics/processes/Compton/setModel LivermorePolarizedModel #StandardModel
+
+#==========================================================================================
+# Electron ionization for e- (for e+ is possible too)
+#==========================================================================================
+
+/gate/physics/addProcess ElectronIonisation e-
+/gate/physics/processes/ElectronIonisation/setModel StandardModel
+
+#==========================================================================================
+# Initialization of physics
+#==========================================================================================
+
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+
+#==========================================================================================
+# ACTOR
+# Description: Actor.mac file  describes what and when save from simulation to output file
+#==========================================================================================
+
+#============================================================================================
+# Creating local actor and attaching it to selected volume (here "detector" from Geometry.mac)
+#============================================================================================
+/gate/actor/addActor LocalActor JPActor
+/gate/actor/JPActor/attachTo detector
+
+#============================================================================================
+# Setting up global actor
+# Commands "enable" describe what save, while commands "filter" describe saving conditions.
+# Description of all enable commands for Global Actor can be found in repository directory:
+# source/digits_hits/src/GateGlobalActorMessenger.cc
+#============================================================================================
+
+/gate/actor/JPActor/global/saveTo example4_two_sources.root #where save data
+
+#============================================================================================
+# Enable commands
+#
+# Try this: if you comment out some below lines you will receive less data
+#============================================================================================
+
+/gate/actor/JPActor/global/enableEventID
+/gate/actor/JPActor/global/enableTrackID
+/gate/actor/JPActor/global/enableProcessName
+/gate/actor/JPActor/global/enableProcessPosition
+/gate/actor/JPActor/global/enableEmissionPointFromSource
+/gate/actor/JPActor/global/enableEnergyBeforeProcess
+/gate/actor/JPActor/global/enableEnergyLossDuringProcess
+/gate/actor/JPActor/global/enableVolumeName
+
+#============================================================================================
+# Saving conditions - filter commands
+#
+# Try this: if you comment out below lines with "#" you will receive a lot of data for
+# different processes and particles. Otherwise you will have only data for gamma which
+# dispersed in Compton scattering
+#============================================================================================
+
+/gate/actor/JPActor/global/filterParticleName gamma #save only data for gamma, this command can be called more then once
+/gate/actor/JPActor/global/filterProcessName Compton #save only for process with name "Compton"
+
+#==========================================================================================
+# INITIALIZATION
+# Description: This part starts GATE visualization
+#==========================================================================================
+
+/gate/run/initialize
+/vis/scene/add/axes # To hide system axes set "#"
+
+#==========================================================================================
+# SOURCE
+# Description: Source.mac file describes particles source(s)
+#==========================================================================================
+
+/gate/source/addSource PointSource JPETSource
+/gate/source/PointSource/gps/type Point
+/gate/source/PointSource/gps/pos/centre 0 0 0 cm
+/gate/source/PointSource/setActivity 1 kBq
+/gate/source/PointSource/setType pPsJPET
+/gate/source/PointSource/setUseUnpolarizedParticles FALSE
+/gate/source/PointSource/gps/particle gamma
+
+# This options control distribution of gammas momentum directions
+/gate/source/PointSource/gps/angtype iso
+/gate/source/PointSource/gps/mintheta 0. deg
+/gate/source/PointSource/gps/maxtheta 180. deg
+/gate/source/PointSource/gps/minphi 0. deg
+/gate/source/PointSource/gps/maxphi 360. deg
+
+/gate/source/addSource LinearSource JPETSource
+/gate/source/LinearSource/gps/type Volume
+/gate/source/LinearSource/gps/shape Cylinder
+/gate/source/LinearSource/gps/radius 0.1 mm
+/gate/source/LinearSource/gps/halfz 25 cm #Because cylinder length along z axis is 50, so halfz = 25
+/gate/source/LinearSource/gps/pos/centre 0 0 0 cm
+/gate/source/LinearSource/setActivity 1 kBq
+/gate/source/LinearSource/setType oPsJPET
+/gate/source/LinearSource/setUseUnpolarizedParticles FALSE
+/gate/source/LinearSource/setLinearPolarizationAngle 0.0 deg
+/gate/source/LinearSource/gps/particle gamma
+
+# This options control distribution of gammas momentum directions
+/gate/source/LinearSource/gps/angtype iso
+/gate/source/LinearSource/gps/mintheta 0. deg
+/gate/source/LinearSource/gps/maxtheta 180. deg
+/gate/source/LinearSource/gps/minphi 0. deg
+/gate/source/LinearSource/gps/maxphi 360. deg
+
+
+#===================================================================================================
+# Initialization of sources
+#===================================================================================================
+
+/gate/source/list
+
+#==========================================================================================
+# Configurations of default out and random numbers generator
+# Description: we use actor to save data, and why we call "allowNoOutput".
+#==========================================================================================
+
+/gate/output/allowNoOutput
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+
+#==========================================================================================
+# APP
+# Description: Application.mac controls number of events to generate during simulation
+# Moreover this file can control time of simulation.
+#==========================================================================================
+
+#==========================================================================================
+# Way no 1: By demanding a concrete number of events to be generated
+# Example: if you have source with activity 1kBq you will receive 10^5 events
+#==========================================================================================
+
+/gate/application/setTotalNumberOfPrimaries 100000
+
+#==========================================================================================
+# Way no 2: By describing simulation time and length of time step.
+# Example: if you have source with activity 1kBq and you set time interval for 10 seconds
+# with time step equal 1 s, at the end you will receive 10^4 events
+#==========================================================================================
+
+#/gate/application/setTimeSlice 1. s
+#/gate/application/setTimeStart 0. s
+#/gate/application/setTimeStop 10. s
+
+#==========================================================================================
+# Run a simulation
+#==========================================================================================
+/gate/application/startDAQ
+
+#==========================================================================================
+# When simulation is finished close GATE
+#==========================================================================================
+exit

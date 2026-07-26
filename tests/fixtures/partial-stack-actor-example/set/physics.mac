@@ -1,0 +1,20 @@
+#==========================================================================================
+# Compton scattering for gamma
+#==========================================================================================
+
+/gate/physics/addProcess Compton gamma
+/gate/physics/processes/Compton/setModel LivermorePolarizedModel #StandardModel
+
+#==========================================================================================
+# Electron ionization for e- (for e+ is possible too)
+#==========================================================================================
+
+/gate/physics/addProcess ElectronIonisation e-
+/gate/physics/processes/ElectronIonisation/setModel StandardModel
+
+#==========================================================================================
+# Initialization of physics
+#==========================================================================================
+
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized

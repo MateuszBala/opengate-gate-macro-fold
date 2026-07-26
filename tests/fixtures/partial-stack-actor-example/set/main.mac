@@ -1,0 +1,72 @@
+#==========================================================================================
+# VISUALIZATION
+# Description: Because for simulation there is no point in displaying the image, 
+# we do not call the file Visualization.mac
+# If you want to see how particles propagation looks line you can replace "/vis/disable"
+# with:
+#
+# /vis/enable
+# /control/execute Visualization.mac
+#
+# But remember to decrease number of generated events to few e.g. 100
+#==========================================================================================
+
+/vis/disable
+
+#==========================================================================================
+# GEOMETRY
+# Description: Geometry.mac file describes detector geometry
+#==========================================================================================
+
+/control/execute Geometry.mac
+
+#==========================================================================================
+# PHYSICS
+# Description: Physics.mac file describes which physics processes include in simulation
+#==========================================================================================
+
+/control/execute Physics.mac
+
+#==========================================================================================
+# ACTOR
+# Description: Actor.mac file  describes what and when save from simulation to output file
+#==========================================================================================
+
+/control/execute Actor.mac
+
+#==========================================================================================
+# INITIALIZATION
+# Description: This part starts GATE visualization
+#==========================================================================================
+
+/gate/run/initialize
+/vis/scene/add/axes # To hide system axes set "#"
+
+#==========================================================================================
+# SOURCE
+# Description: Source.mac file describes particles source(s)
+#==========================================================================================
+
+/control/execute Source.mac
+
+#==========================================================================================
+# Configurations of default out and random numbers generator
+# Description: we use actor to save data, and why we call "allowNoOutput".
+#==========================================================================================
+
+/gate/output/allowNoOutput
+/gate/random/setEngineName MersenneTwister
+/gate/random/setEngineSeed auto
+
+#==========================================================================================
+# APP
+# Description: Application.mac controls number of events to generate during simulation
+# Moreover this file can control time of simulation.
+#==========================================================================================
+
+/control/execute Application.mac
+
+#==========================================================================================
+# When simulation is finished close GATE
+#==========================================================================================
+exit
