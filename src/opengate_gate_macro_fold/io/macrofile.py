@@ -44,3 +44,4 @@ class MacroFile:
     content: list[str] = field(default_factory=list)
     is_mono_macro: bool = False
     content_type: MacroContent | None = None
+    name: str | None = None
