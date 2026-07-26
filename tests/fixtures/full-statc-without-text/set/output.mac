@@ -1,0 +1,13 @@
+/gate/output/analysis/disable  
+/gate/output/fastanalysis/disable  
+/gate/output/multianalysis/enable
+
+/gate/output/root/enable
+/gate/output/root/setFileName ../output/simulation_output-1
+
+/gate/output/root/setRootHitFlag 1
+/gate/output/root/setRootSinglesFlag 1
+
+/gate/output/multianalysis/verbose 1  
+/gate/output/multianalysis/describe
+

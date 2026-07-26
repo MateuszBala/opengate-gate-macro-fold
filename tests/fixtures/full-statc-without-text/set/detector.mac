@@ -1,0 +1,107 @@
+/gate/geometry/setMaterialDatabase GateMaterials.db
+
+/gate/world/geometry/setXLength 2000. mm
+/gate/world/geometry/setYLength 2000. mm
+/gate/world/geometry/setZLength 2000. mm
+/gate/world/vis/forceWireframe 1
+/gate/world/vis/forceSolid 0
+/gate/world/vis/setColor white
+/gate/world/setMaterial Vacuum
+
+/gate/world/daughters/name cylindricalPET
+/gate/world/daughters/insert cylinder
+/gate/cylindricalPET/setMaterial Vacuum
+/gate/cylindricalPET/geometry/setRmin 409.0 mm
+/gate/cylindricalPET/geometry/setRmax 500.0 mm
+/gate/cylindricalPET/geometry/setHeight 1060 mm
+/gate/cylindricalPET/vis/forceWireframe
+/gate/cylindricalPET/vis/setColor white
+
+/gate/cylindricalPET/daughters/name rsector
+/gate/cylindricalPET/daughters/insert box
+/gate/rsector/placement/setTranslation 0.0 420.0 0.0 mm
+/gate/rsector/geometry/setXLength 64.6 mm
+/gate/rsector/geometry/setYLength 20.0 mm
+/gate/rsector/geometry/setZLength 263.2 mm
+/gate/rsector/setMaterial Vacuum
+/gate/rsector/vis/forceWireframe 1
+/gate/rsector/vis/forceSolid 0
+/gate/rsector/vis/setColor blue
+
+/gate/rsector/daughters/name module
+/gate/rsector/daughters/insert box
+/gate/module/geometry/setXLength 64.6 mm
+/gate/module/geometry/setYLength 20.0 mm
+/gate/module/geometry/setZLength 32.2 mm
+/gate/module/setMaterial Vacuum
+/gate/module/vis/forceWireframe 1
+/gate/module/vis/forceSolid 0
+/gate/module/vis/setColor yellow
+
+/gate/module/daughters/name submodule
+/gate/module/daughters/insert box
+/gate/submodule/geometry/setXLength 16.0 mm
+/gate/submodule/geometry/setYLength 20.0 mm
+/gate/submodule/geometry/setZLength 16.0 mm
+/gate/submodule/setMaterial Vacuum
+/gate/submodule/vis/forceWireframe 1
+/gate/submodule/vis/forceSolid 0
+/gate/submodule/vis/setColor red
+
+/gate/submodule/daughters/name crystal
+/gate/submodule/daughters/insert box
+/gate/crystal/placement/setTranslation 0.0 0.0 0.0 mm
+/gate/crystal/geometry/setXLength 3.2 mm
+/gate/crystal/geometry/setYLength 20.0 mm
+/gate/crystal/geometry/setZLength 3.2 mm
+/gate/crystal/setMaterial Vacuum
+/gate/crystal/vis/forceWireframe 0
+/gate/crystal/vis/forceSolid 1
+/gate/crystal/vis/setColor white
+
+/gate/crystal/daughters/name layer0
+/gate/crystal/daughters/insert box
+/gate/layer0/placement/setTranslation 0.0 0.0 0.0 mm
+/gate/layer0/geometry/setXLength 3.2 mm
+/gate/layer0/geometry/setYLength 20.0 mm
+/gate/layer0/geometry/setZLength 3.2 mm
+/gate/layer0/setMaterial LSO
+/gate/layer0/vis/forceWireframe 0
+/gate/layer0/vis/forceSolid 1
+/gate/layer0/vis/setColor cyan
+
+/gate/crystal/repeaters/insert cubicArray
+/gate/crystal/cubicArray/setRepeatNumberX 5
+/gate/crystal/cubicArray/setRepeatNumberY 1
+/gate/crystal/cubicArray/setRepeatNumberZ 5
+/gate/crystal/cubicArray/setRepeatVector 3.2 0. 3.2 mm
+
+/gate/submodule/repeaters/insert cubicArray
+/gate/submodule/cubicArray/setRepeatNumberX 4
+/gate/submodule/cubicArray/setRepeatNumberY 1
+/gate/submodule/cubicArray/setRepeatNumberZ 2
+/gate/submodule/cubicArray/setRepeatVector 16.2 0. 16.2 mm
+
+/gate/module/repeaters/insert cubicArray
+/gate/module/cubicArray/setRepeatNumberX 1
+/gate/module/cubicArray/setRepeatNumberY 1
+/gate/module/cubicArray/setRepeatNumberZ 8
+/gate/module/cubicArray/setRepeatVector 0. 0. 33.0 mm
+
+/gate/rsector/repeaters/insert cubicArray
+/gate/rsector/cubicArray/setRepeatNumberX 1
+/gate/rsector/cubicArray/setRepeatNumberY 1
+/gate/rsector/cubicArray/setRepeatNumberZ 4
+/gate/rsector/cubicArray/setRepeatVector 0. 0. 265.6 mm
+/gate/rsector/repeaters/insert ring
+/gate/rsector/ring/setRepeatNumber 38
+/gate/rsector/ring/enableAutoRotation
+
+/gate/systems/cylindricalPET/rsector/attach rsector
+/gate/systems/cylindricalPET/module/attach module
+/gate/systems/cylindricalPET/submodule/attach submodule
+/gate/systems/cylindricalPET/layer0/attach layer0
+/gate/systems/cylindricalPET/crystal/attach crystal
+
+/gate/layer0/attachCrystalSD
+

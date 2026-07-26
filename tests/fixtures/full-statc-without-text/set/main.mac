@@ -1,0 +1,21 @@
+
+/control/execute detector.mac
+
+/control/execute phantom.mac
+
+/control/execute physics.mac
+
+/gate/run/initialize
+
+/gate/physics/displayCuts
+
+/control/execute visualisation.mac
+
+/control/execute source.mac
+
+/control/execute output.mac
+
+/control/execute random.mac
+
+/control/execute application.mac
+
