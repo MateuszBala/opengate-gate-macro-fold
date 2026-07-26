@@ -1,0 +1,62 @@
+# G E O M E T R Y
+# BEGIN EXECUTE detector.mac
+
+/control/execute detector.mac
+
+# END EXECUTE detector.mac
+
+
+#  P H A N T O M
+# BEGIN EXECUTE phantom.mac
+
+/control/execute phantom.mac
+
+# END EXECUTE phantom.mac
+
+
+# P H Y S I C S
+# BEGIN EXECUTE physics.mac
+
+/control/execute physics.mac
+
+# END EXECUTE physics.mac
+
+# I N I T I A L I Z A T I O N
+/gate/run/initialize
+
+# REGION CUTS
+/gate/physics/displayCuts
+
+# V I S U A L I S A T I O N
+# BEGIN EXECUTE visualisation.mac
+
+/control/execute visualisation.mac
+
+# END EXECUTE visualisation.mac
+
+#  P A R T I C L E   S O U R C E
+# BEGIN EXECUTE source.mac
+
+/control/execute source.mac
+
+# END EXECUTE source.mac
+
+/control/execute output.mac
+
+# END EXECUTE output.mac
+
+
+#  R A N D O M   E N G I N E  A N D  S E E D
+# BEGIN EXECUTE random.mac
+
+/control/execute random.mac
+
+# END EXECUTE random.mac
+
+
+# S I M U L A T I O N
+# BEGIN EXECUTE application.mac
+
+/control/execute application.mac
+
+# END EXECUTE application.mac
