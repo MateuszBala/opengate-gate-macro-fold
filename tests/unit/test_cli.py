@@ -291,3 +291,129 @@ def test_main_returns_one_when_config_build_raises_value_error(
     # Assert
     assert exit_code == 1
     assert logger.errors == ["Error: invalid configuration"]
+
+
+def test_main_rejects_title_with_path_separators(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """main should refuse a --title that would escape the output directory."""
+    # Arrange
+    logger = _DummyLogger()
+    monkeypatch.setattr(cli, "configure_logging", lambda: None)
+    monkeypatch.setattr(cli, "get_logger", lambda _name: logger)
+    macros_dir = tmp_path / "macros"
+    macros_dir.mkdir()
+    (macros_dir / "main.mac").write_text("/control/execute a.mac\n", encoding="utf-8")
+    (macros_dir / "a.mac").write_text("/gate/physics/processList Enabled\n", encoding="utf-8")
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(macros_dir),
+            "--output-dir",
+            str(tmp_path / "out"),
+            "--title",
+            "../evil",
+        ]
+    )
+
+    # Assert
+    assert exit_code == 1
+    assert logger.errors == ["Error: --title must be a plain file name, got: '../evil'."]
+    assert not (tmp_path / "evil.mac").exists()
+
+
+def test_main_does_not_double_mac_suffix_in_title(tmp_path: Path) -> None:
+    """main should keep a --title that already ends with .mac unchanged."""
+    # Arrange
+    macros_dir = tmp_path / "macros"
+    macros_dir.mkdir()
+    (macros_dir / "main.mac").write_text("/control/execute a.mac\n", encoding="utf-8")
+    (macros_dir / "a.mac").write_text("/gate/physics/processList Enabled\n", encoding="utf-8")
+    output_dir = tmp_path / "out"
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(macros_dir),
+            "--output-dir",
+            str(output_dir),
+            "--title",
+            "macro.mac",
+        ]
+    )
+
+    # Assert
+    assert exit_code == 0
+    assert (output_dir / "macro.mac").exists()
+    assert not (output_dir / "macro.mac.mac").exists()
+
+
+def test_main_finds_main_macro_file_case_insensitively(tmp_path: Path) -> None:
+    """main should accept a set directory whose entry file is named Main.mac."""
+    # Arrange
+    macros_dir = tmp_path / "macros"
+    macros_dir.mkdir()
+    (macros_dir / "Main.mac").write_text("/control/execute a.mac\n", encoding="utf-8")
+    (macros_dir / "a.mac").write_text("/gate/physics/processList Enabled\n", encoding="utf-8")
+    output_dir = tmp_path / "out"
+
+    # Act
+    exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(macros_dir),
+            "--output-dir",
+            str(output_dir),
+        ]
+    )
+
+    # Assert
+    assert exit_code == 0
+    assert (output_dir / "mono.mac").read_text(encoding="utf-8") == (
+        "/gate/physics/processList Enabled\n"
+    )
+
+
+def test_main_reports_clean_error_for_wrong_path_types(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """main should log OS-level path errors and return 1 instead of raising."""
+    # Arrange
+    logger = _DummyLogger()
+    monkeypatch.setattr(cli, "configure_logging", lambda: None)
+    monkeypatch.setattr(cli, "get_logger", lambda _name: logger)
+    directory_input = tmp_path / "dir.mac"
+    directory_input.mkdir()
+    file_input = tmp_path / "file.mac"
+    file_input.write_text("/vis/disable\n", encoding="utf-8")
+
+    # Act
+    unfold_exit_code = cli.main(
+        [
+            "--unfold",
+            "--input-mono-macro-file",
+            str(directory_input),
+            "--output-dir",
+            str(tmp_path / "out"),
+        ]
+    )
+    fold_exit_code = cli.main(
+        [
+            "--fold",
+            "--input-macros-dir",
+            str(file_input),
+            "--output-dir",
+            str(tmp_path / "out"),
+        ]
+    )
+
+    # Assert
+    assert unfold_exit_code == 1
+    assert fold_exit_code == 1
+    assert len(logger.errors) == 2

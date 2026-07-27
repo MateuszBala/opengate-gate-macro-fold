@@ -145,3 +145,22 @@ def test_unfold_splits_detector_and_phantom_regions() -> None:
         "/control/execute detector.mac\n",
         "/control/execute phantom.mac\n",
     ]
+
+
+def test_unfold_skips_runs_colliding_with_existing_execute_references() -> None:
+    """A run whose file name is already referenced by /control/execute stays in main."""
+    # Arrange
+    mono_macro = MacroFile(
+        content=[
+            "/gate/physics/addProcess Compton gamma\n",
+            "/gate/run/initialize\n",
+            "/control/execute physics.mac\n",
+        ]
+    )
+
+    # Act
+    main_file, block_files = unfold(mono_macro)
+
+    # Assert
+    assert block_files == []
+    assert main_file.content == mono_macro.content

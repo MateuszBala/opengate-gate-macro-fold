@@ -99,3 +99,32 @@ def test_fold_of_unfold_round_trips_mono_content(fixture_group: str) -> None:
 
     # Assert
     assert refolded.content == mono_macro.content
+
+
+def test_fold_of_unfold_round_trips_file_without_final_newline() -> None:
+    """A mono macro not ending with a newline must survive the round trip byte-exact."""
+    # Arrange
+    mono_macro = MacroFile(content=["/gate/physics/addProcess Compton gamma"])
+
+    # Act
+    main_file, block_files = unfold(mono_macro)
+    refolded = fold(main_file, block_files)
+
+    # Assert
+    assert refolded.content == mono_macro.content
+
+
+def test_fold_does_not_resolve_ambiguous_case_insensitive_names() -> None:
+    """A reference matching two files that differ only in case must stay verbatim."""
+    # Arrange
+    main_file = MacroFile(content=["/control/execute DETECTOR.MAC\n"])
+    block_files = [
+        MacroFile(content=["/gate/world/setMaterial Air\n"], name="Detector.mac"),
+        MacroFile(content=["/gate/world/setMaterial Vacuum\n"], name="detector.mac"),
+    ]
+
+    # Act
+    mono_macro = fold(main_file, block_files)
+
+    # Assert
+    assert mono_macro.content == ["/control/execute DETECTOR.MAC\n"]
