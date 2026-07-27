@@ -13,7 +13,9 @@ from opengate_gate_macro_fold import cli
 FIXTURES_DIR = Path(__file__).resolve().parent.parent / "fixtures"
 
 
-@pytest.mark.parametrize("fixture_group", ["full-stack", "partial-stack"])
+@pytest.mark.parametrize(
+    "fixture_group", ["full-stack", "partial-stack", "full-statc-without-text"]
+)
 def test_main_unfold_reproduces_fixture_set_directory(fixture_group: str, tmp_path: Path) -> None:
     """--unfold on a fixture mono file should reproduce its set/ directory exactly."""
     # Arrange

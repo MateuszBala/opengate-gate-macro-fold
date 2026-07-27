@@ -13,7 +13,10 @@ from opengate_gate_macro_fold import cli
 FIXTURES_DIR = Path(__file__).resolve().parent.parent / "fixtures"
 
 
-@pytest.mark.parametrize("fixture_group", ["full-stack", "partial-stack"])
+@pytest.mark.parametrize(
+    "fixture_group",
+    ["full-stack", "partial-stack", "full-statc-without-text", "partial-stack-actor-example"],
+)
 def test_main_fold_reproduces_fixture_mono_file(fixture_group: str, tmp_path: Path) -> None:
     """--fold on a fixture set/ directory should reproduce its mono/macro.mac exactly."""
     # Arrange
