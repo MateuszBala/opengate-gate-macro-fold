@@ -1,7 +1,7 @@
 # opengate-gate-macro-fold
 
 [![CI](https://github.com/MateuszBala/opengate-gate-macro-fold/actions/workflows/ci.yaml/badge.svg)](https://github.com/MateuszBala/opengate-gate-macro-fold/actions/workflows/ci.yaml)
-[![Version](https://img.shields.io/badge/version-0.1.2-informational)](https://github.com/MateuszBala/opengate-gate-macro-fold/releases)
+[![Version](https://img.shields.io/badge/version-0.2.0-informational)](https://github.com/MateuszBala/opengate-gate-macro-fold/releases)
 [![Standard Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)]()
 [![Standard Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)]()
 [![Standard Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&logoColor=white)]()
