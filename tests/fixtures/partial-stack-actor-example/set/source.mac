@@ -1,0 +1,40 @@
+/gate/source/addSource PointSource JPETSource
+/gate/source/PointSource/gps/type Point
+/gate/source/PointSource/gps/pos/centre 0 0 0 cm
+/gate/source/PointSource/setActivity 1 kBq
+/gate/source/PointSource/setType pPsJPET
+/gate/source/PointSource/setUseUnpolarizedParticles FALSE
+/gate/source/PointSource/gps/particle gamma
+
+# This options control distribution of gammas momentum directions
+/gate/source/PointSource/gps/angtype iso
+/gate/source/PointSource/gps/mintheta 0. deg
+/gate/source/PointSource/gps/maxtheta 180. deg
+/gate/source/PointSource/gps/minphi 0. deg
+/gate/source/PointSource/gps/maxphi 360. deg
+
+/gate/source/addSource LinearSource JPETSource
+/gate/source/LinearSource/gps/type Volume
+/gate/source/LinearSource/gps/shape Cylinder
+/gate/source/LinearSource/gps/radius 0.1 mm
+/gate/source/LinearSource/gps/halfz 25 cm #Because cylinder length along z axis is 50, so halfz = 25
+/gate/source/LinearSource/gps/pos/centre 0 0 0 cm
+/gate/source/LinearSource/setActivity 1 kBq
+/gate/source/LinearSource/setType oPsJPET
+/gate/source/LinearSource/setUseUnpolarizedParticles FALSE
+/gate/source/LinearSource/setLinearPolarizationAngle 0.0 deg
+/gate/source/LinearSource/gps/particle gamma
+
+# This options control distribution of gammas momentum directions
+/gate/source/LinearSource/gps/angtype iso
+/gate/source/LinearSource/gps/mintheta 0. deg
+/gate/source/LinearSource/gps/maxtheta 180. deg
+/gate/source/LinearSource/gps/minphi 0. deg
+/gate/source/LinearSource/gps/maxphi 360. deg
+
+
+#===================================================================================================
+# Initialization of sources
+#===================================================================================================
+
+/gate/source/list

@@ -1,7 +1,4 @@
-# G E O M E T R Y
-# BEGIN EXECUTE detector.mac
 /gate/geometry/setMaterialDatabase GateMaterials.db
-# WORLD INITIALIZATION
 
 /gate/world/geometry/setXLength 2000. mm
 /gate/world/geometry/setYLength 2000. mm
@@ -11,8 +8,6 @@
 /gate/world/vis/setColor white
 /gate/world/setMaterial Vacuum
 
-# SCANNER
-
 /gate/world/daughters/name cylindricalPET
 /gate/world/daughters/insert cylinder
 /gate/cylindricalPET/setMaterial Vacuum
@@ -21,8 +16,6 @@
 /gate/cylindricalPET/geometry/setHeight 1060 mm
 /gate/cylindricalPET/vis/forceWireframe
 /gate/cylindricalPET/vis/setColor white
-
-# DEA_LINE (rsector)
 
 /gate/cylindricalPET/daughters/name rsector
 /gate/cylindricalPET/daughters/insert box
@@ -35,8 +28,6 @@
 /gate/rsector/vis/forceSolid 0
 /gate/rsector/vis/setColor blue
 
-# DET_MODULE (module)
-
 /gate/rsector/daughters/name module
 /gate/rsector/daughters/insert box
 /gate/module/geometry/setXLength 64.6 mm
@@ -47,8 +38,6 @@
 /gate/module/vis/forceSolid 0
 /gate/module/vis/setColor yellow
 
-# MINIBLOCK (submodule)
-
 /gate/module/daughters/name submodule
 /gate/module/daughters/insert box
 /gate/submodule/geometry/setXLength 16.0 mm
@@ -58,8 +47,6 @@
 /gate/submodule/vis/forceWireframe 1
 /gate/submodule/vis/forceSolid 0
 /gate/submodule/vis/setColor red
-
-# CRYSTAL
 
 /gate/submodule/daughters/name crystal
 /gate/submodule/daughters/insert box
@@ -72,8 +59,6 @@
 /gate/crystal/vis/forceSolid 1
 /gate/crystal/vis/setColor white
 
-# LAYER 
-
 /gate/crystal/daughters/name layer0
 /gate/crystal/daughters/insert box
 /gate/layer0/placement/setTranslation 0.0 0.0 0.0 mm
@@ -85,15 +70,11 @@
 /gate/layer0/vis/forceSolid 1
 /gate/layer0/vis/setColor cyan
 
-# CRYSTAL REPEATER
-
 /gate/crystal/repeaters/insert cubicArray
 /gate/crystal/cubicArray/setRepeatNumberX 5
 /gate/crystal/cubicArray/setRepeatNumberY 1
 /gate/crystal/cubicArray/setRepeatNumberZ 5
 /gate/crystal/cubicArray/setRepeatVector 3.2 0. 3.2 mm
-
-# MINIBLOCK REPEATER
 
 /gate/submodule/repeaters/insert cubicArray
 /gate/submodule/cubicArray/setRepeatNumberX 4
@@ -101,15 +82,11 @@
 /gate/submodule/cubicArray/setRepeatNumberZ 2
 /gate/submodule/cubicArray/setRepeatVector 16.2 0. 16.2 mm
 
-# DET_MODULE REPEATER
-
 /gate/module/repeaters/insert cubicArray
 /gate/module/cubicArray/setRepeatNumberX 1
 /gate/module/cubicArray/setRepeatNumberY 1
 /gate/module/cubicArray/setRepeatNumberZ 8
 /gate/module/cubicArray/setRepeatVector 0. 0. 33.0 mm
-
-# DEA_LINE REPEATER
 
 /gate/rsector/repeaters/insert cubicArray
 /gate/rsector/cubicArray/setRepeatNumberX 1
@@ -120,8 +97,6 @@
 /gate/rsector/ring/setRepeatNumber 38
 /gate/rsector/ring/enableAutoRotation
 
-# SYSTEM
-
 /gate/systems/cylindricalPET/rsector/attach rsector
 /gate/systems/cylindricalPET/module/attach module
 /gate/systems/cylindricalPET/submodule/attach submodule
@@ -129,14 +104,6 @@
 /gate/systems/cylindricalPET/crystal/attach crystal
 
 /gate/layer0/attachCrystalSD
-
-
-# END EXECUTE detector.mac
-
-
-#  P H A N T O M
-# BEGIN EXECUTE phantom.mac
-# NEMA IEC 2001 IQ PHANTOM
 
 /gate/world/daughters/name NEMA_IQ
 /gate/world/daughters/insert box
@@ -148,8 +115,6 @@
 /gate/NEMA_IQ/vis/forceWireframe
 /gate/NEMA_IQ/vis/setColor gray
 
-# Cold Volume
-
 /gate/world/daughters/name NEMA_IQ_cold
 /gate/world/daughters/insert box
 /gate/NEMA_IQ_cold/placement/setTranslation 0.0 -15. 0.0 cm
@@ -160,9 +125,6 @@
 /gate/NEMA_IQ_cold/vis/forceWireframe
 /gate/NEMA_IQ_cold/vis/setColor gray
 
-# Upper Half of Phantom
-
-# Center Section of Upper Outer Shell
 /gate/NEMA_IQ/daughters/name outershell1
 /gate/NEMA_IQ/daughters/insert cylinder
 /gate/outershell1/placement/setTranslation 0.0 -3.5 0.0 cm
@@ -174,7 +136,6 @@
 /gate/outershell1/vis/forceWireframe
 /gate/outershell1/vis/setColor red
 
-# Water in Phantom
 /gate/outershell1/daughters/name upperinterior
 /gate/outershell1/daughters/insert cylinder
 /gate/upperinterior/placement/setTranslation 0.0 0.0 0.0 cm
@@ -187,7 +148,6 @@
 /gate/upperinterior/vis/forceWireframe
 /gate/upperinterior/vis/setColor blue
 
-# Plastic Shell Surrounding Center Cylinder
 /gate/upperinterior/daughters/name centercyl
 /gate/upperinterior/daughters/insert cylinder
 /gate/centercyl/placement/setTranslation 0.0 3.5 0.0 cm
@@ -197,7 +157,6 @@
 /gate/centercyl/vis/forceWireframe
 /gate/centercyl/vis/setColor red
 
-# Hollow Space in Central Cylinder
 /gate/centercyl/daughters/name centercylin
 /gate/centercyl/daughters/insert cylinder
 /gate/centercylin/placement/setTranslation 0.0 0.0 0.0 cm
@@ -205,10 +164,8 @@
 /gate/centercylin/geometry/setRmin 0.0 cm
 /gate/centercylin/geometry/setHeight 21.4 cm
 /gate/centercylin/setMaterial Water
-#/gate/centercylin/vis/forceWireframe
 /gate/centercylin/vis/setColor gray
 
-# 10 mm Sphere Exterior
 /gate/upperinterior/daughters/name sphere10
 /gate/upperinterior/daughters/insert sphere
 /gate/sphere10/placement/setTranslation 2.86 8.45367 3.7 cm
@@ -217,17 +174,14 @@
 /gate/sphere10/vis/forceWireframe
 /gate/sphere10/vis/setColor red
 
-# 10 mm Sphere
 /gate/sphere10/daughters/name sphere10in
 /gate/sphere10/daughters/insert sphere
 /gate/sphere10in/placement/setTranslation 0.0 0.0 0.0 cm
 /gate/sphere10in/geometry/setRmax 0.5 cm
 /gate/sphere10in/geometry/setRmin 0.0 cm
 /gate/sphere10in/setMaterial Water
-#/gate/sphere10in/vis/forceWireframe
 /gate/sphere10in/vis/setColor gray
 
-# 10 mm Fill Capillary Exterior
 /gate/upperinterior/daughters/name fill10
 /gate/upperinterior/daughters/insert cylinder
 /gate/fill10/placement/setTranslation 2.86 8.45367 7.5 cm
@@ -237,7 +191,6 @@
 /gate/fill10/vis/forceWireframe
 /gate/fill10/vis/setColor red
 
-# 10 mm Fill Capillary
 /gate/fill10/daughters/name fill10in
 /gate/fill10/daughters/insert cylinder
 /gate/fill10in/placement/setTranslation 0.0 0.0 0.0 cm
@@ -245,10 +198,8 @@
 /gate/fill10in/geometry/setRmin 0. cm
 /gate/fill10in/geometry/setHeight 6.4 cm
 /gate/fill10in/setMaterial Water
-#/gate/fill10in/vis/forceWireframe
 /gate/fill10in/vis/setColor gray
 
-# 13 mm Sphere Exterior
 /gate/upperinterior/daughters/name sphere13
 /gate/upperinterior/daughters/insert sphere
 /gate/sphere13/placement/setTranslation -2.86 8.45367 3.7 cm
@@ -257,17 +208,14 @@
 /gate/sphere13/vis/forceWireframe
 /gate/sphere13/vis/setColor red
 
-# 13 mm Sphere
 /gate/sphere13/daughters/name sphere13in
 /gate/sphere13/daughters/insert sphere
 /gate/sphere13in/placement/setTranslation 0.0 0.0 0.0 cm
 /gate/sphere13in/geometry/setRmax 0.65 cm
 /gate/sphere13in/geometry/setRmin 0.0 cm
 /gate/sphere13in/setMaterial Water
-#/gate/sphere13in/vis/forceWireframe
 /gate/sphere13in/vis/setColor gray
 
-# 13 mm Fill Capillary Exterior
 /gate/upperinterior/daughters/name fill13
 /gate/upperinterior/daughters/insert cylinder
 /gate/fill13/placement/setTranslation -2.86 8.45367 7.5875 cm
@@ -277,7 +225,6 @@
 /gate/fill13/vis/forceWireframe
 /gate/fill13/vis/setColor red
 
-# 13 mm Fill Capillary
 /gate/fill13/daughters/name fill13in
 /gate/fill13/daughters/insert cylinder
 /gate/fill13in/placement/setTranslation 0.0 0.0 0.0 cm
@@ -285,10 +232,8 @@
 /gate/fill13in/geometry/setRmin 0. cm
 /gate/fill13in/geometry/setHeight 6.225 cm
 /gate/fill13in/setMaterial Water
-#/gate/fill13in/vis/forceWireframe
 /gate/fill13in/vis/setColor gray
 
-# 17 mm Sphere Exterior
 /gate/upperinterior/daughters/name sphere17
 /gate/upperinterior/daughters/insert sphere
 /gate/sphere17/placement/setTranslation -5.72 3.5 3.7 cm
@@ -297,17 +242,14 @@
 /gate/sphere17/vis/forceWireframe
 /gate/sphere17/vis/setColor red
 
-# 17 mm Sphere
 /gate/sphere17/daughters/name sphere17in
 /gate/sphere17/daughters/insert sphere
 /gate/sphere17in/placement/setTranslation 0.0 0.0 0.0 cm
 /gate/sphere17in/geometry/setRmax 0.85 cm
 /gate/sphere17in/geometry/setRmin 0.0 cm
 /gate/sphere17in/setMaterial Air
-#/gate/sphere17in/vis/forceWireframe
 /gate/sphere17in/vis/setColor gray
 
-# 17 mm Fill Capillary Exterior
 /gate/upperinterior/daughters/name fill17
 /gate/upperinterior/daughters/insert cylinder
 /gate/fill17/placement/setTranslation -5.72 3.5 7.675 cm
@@ -317,7 +259,6 @@
 /gate/fill17/vis/forceWireframe
 /gate/fill17/vis/setColor red
 
-# 17 mm Fill Capillary
 /gate/fill17/daughters/name fill17in
 /gate/fill17/daughters/insert cylinder
 /gate/fill17in/placement/setTranslation 0.0 0.0 0.0 cm
@@ -325,10 +266,8 @@
 /gate/fill17in/geometry/setRmin 0. cm
 /gate/fill17in/geometry/setHeight 6.05 cm
 /gate/fill17in/setMaterial Air
-#/gate/fill17in/vis/forceWireframe
 /gate/fill17in/vis/setColor gray
 
-# 37 mm Sphere Exterior
 /gate/upperinterior/daughters/name sphere37
 /gate/upperinterior/daughters/insert sphere
 /gate/sphere37/placement/setTranslation 5.72 3.5 3.7 cm
@@ -337,17 +276,14 @@
 /gate/sphere37/vis/forceWireframe
 /gate/sphere37/vis/setColor red
 
-# 37 mm Sphere
 /gate/sphere37/daughters/name sphere37in
 /gate/sphere37/daughters/insert sphere
 /gate/sphere37in/placement/setTranslation 0.0 0.0 0.0 cm
 /gate/sphere37in/geometry/setRmax 1.85 cm
 /gate/sphere37in/geometry/setRmin 0.0 cm
 /gate/sphere37in/setMaterial Air
-#/gate/sphere37in/vis/forceWireframe
 /gate/sphere37in/vis/setColor gray
 
-# 37 mm Fill Capillary Exterior
 /gate/upperinterior/daughters/name fill37
 /gate/upperinterior/daughters/insert cylinder
 /gate/fill37/placement/setTranslation 5.72 3.5 8.175 cm
@@ -357,7 +293,6 @@
 /gate/fill37/vis/forceWireframe
 /gate/fill37/vis/setColor red
 
-# 37 mm Fill Capillary
 /gate/fill37/daughters/name fill37in
 /gate/fill37/daughters/insert cylinder
 /gate/fill37in/placement/setTranslation 0.0 0.0 0.0 cm
@@ -365,11 +300,8 @@
 /gate/fill37in/geometry/setRmin 0. cm
 /gate/fill37in/geometry/setHeight 5.05 cm
 /gate/fill37in/setMaterial Air
-#/gate/fill37in/vis/forceWireframe
 /gate/fill37in/vis/setColor gray
 
-# Exterior Shell of Upper Half of Phantom
-# Top Side
 /gate/NEMA_IQ/daughters/name topshell1
 /gate/NEMA_IQ/daughters/insert cylinder
 /gate/topshell1/placement/setTranslation 0.0 -3.5 10.85 cm
@@ -391,11 +323,8 @@
 /gate/bottomshell1/geometry/setPhiStart 0. deg
 /gate/bottomshell1/geometry/setDeltaPhi 180. deg
 /gate/bottomshell1/setMaterial Plastic
-#/gate/bottomshell1/vis/forceWireframe
 /gate/bottomshell1/vis/setColor yellow
 
-# Lower Half Of Phantom
-# Lower Left Corner Center Section Cylinder 
 /gate/NEMA_IQ/daughters/name outershell2
 /gate/NEMA_IQ/daughters/insert cylinder
 /gate/outershell2/placement/setTranslation 7.0 -3.5 0.0 cm
@@ -419,7 +348,6 @@
 /gate/LLinterior/vis/forceWireframe
 /gate/LLinterior/vis/setColor blue
 
-# Lower Right Corner Center Section Cylinder 
 /gate/NEMA_IQ/daughters/name outershell3
 /gate/NEMA_IQ/daughters/insert cylinder
 /gate/outershell3/placement/setTranslation -7.0 -3.5 0.0 cm
@@ -443,7 +371,6 @@
 /gate/LRinterior/vis/forceWireframe
 /gate/LRinterior/vis/setColor blue
 
-# Bottom Box
 /gate/NEMA_IQ/daughters/name outershell4
 /gate/NEMA_IQ/daughters/insert box
 /gate/outershell4/placement/setTranslation 0.0 -7.5 0.0 cm
@@ -454,7 +381,6 @@
 /gate/outershell4/vis/forceWireframe
 /gate/outershell4/vis/setColor red
 
-# Interior Box
 /gate/outershell4/daughters/name boxinterior
 /gate/outershell4/daughters/insert box
 /gate/boxinterior/placement/setTranslation 0.0 0.15 0.0 cm
@@ -465,7 +391,6 @@
 /gate/boxinterior/vis/forceWireframe
 /gate/boxinterior/vis/setColor blue
 
-# 22 mm Sphere Exterior
 /gate/boxinterior/daughters/name sphere22
 /gate/boxinterior/daughters/insert sphere
 /gate/sphere22/placement/setTranslation -2.86 2.39633 3.7 cm
@@ -474,17 +399,14 @@
 /gate/sphere22/vis/forceWireframe
 /gate/sphere22/vis/setColor red
 
-# 22 mm Sphere Interior
 /gate/sphere22/daughters/name sphere22in
 /gate/sphere22/daughters/insert sphere
 /gate/sphere22in/placement/setTranslation 0.0 0.0 0.0 cm
 /gate/sphere22in/geometry/setRmax 1.1 cm
 /gate/sphere22in/geometry/setRmin 0.0 cm
 /gate/sphere22in/setMaterial Water
-#/gate/sphere22in/vis/forceWireframe
 /gate/sphere22in/vis/setColor gray
 
-# 22 mm Fill Capillary Exterior
 /gate/boxinterior/daughters/name fill22
 /gate/boxinterior/daughters/insert cylinder
 /gate/fill22/placement/setTranslation -2.86 2.39633 7.8 cm
@@ -494,7 +416,6 @@
 /gate/fill22/vis/forceWireframe
 /gate/fill22/vis/setColor red
 
-# 22 mm Fill Capillary
 /gate/fill22/daughters/name fill22in
 /gate/fill22/daughters/insert cylinder
 /gate/fill22in/placement/setTranslation 0.0 0.0 0.0 cm
@@ -502,10 +423,8 @@
 /gate/fill22in/geometry/setRmin 0. cm
 /gate/fill22in/geometry/setHeight 5.8 cm
 /gate/fill22in/setMaterial Water
-#/gate/fill22in/vis/forceWireframe
 /gate/fill22in/vis/setColor gray
 
-# 28 mm Sphere Exterior
 /gate/boxinterior/daughters/name sphere28
 /gate/boxinterior/daughters/insert sphere
 /gate/sphere28/placement/setTranslation 2.86 2.39633 3.7 cm
@@ -514,17 +433,14 @@
 /gate/sphere28/vis/forceWireframe
 /gate/sphere28/vis/setColor red
 
-# 28 mm Sphere
 /gate/sphere28/daughters/name sphere28in
 /gate/sphere28/daughters/insert sphere
 /gate/sphere28in/placement/setTranslation 0.0 0.0 0.0 cm
 /gate/sphere28in/geometry/setRmax 1.4 cm
 /gate/sphere28in/geometry/setRmin 0.0 cm
 /gate/sphere28in/setMaterial Water
-#/gate/sphere28in/vis/forceWireframe
 /gate/sphere28in/vis/setColor gray
 
-# 28 mm Fill Capillary Exterior
 /gate/boxinterior/daughters/name fill28
 /gate/boxinterior/daughters/insert cylinder
 /gate/fill28/placement/setTranslation 2.86 2.39633 7.95 cm
@@ -534,7 +450,6 @@
 /gate/fill28/vis/forceWireframe
 /gate/fill28/vis/setColor red
 
-# 28 mm Fill Capillary
 /gate/fill28/daughters/name fill28in
 /gate/fill28/daughters/insert cylinder
 /gate/fill28in/placement/setTranslation 0.0 0.0 0.0 cm
@@ -542,7 +457,6 @@
 /gate/fill28in/geometry/setRmin 0. cm
 /gate/fill28in/geometry/setHeight 5.5 cm
 /gate/fill28in/setMaterial Water
-#/gate/fill28in/vis/forceWireframe
 /gate/fill28in/vis/setColor gray
 
 /gate/NEMA_IQ/daughters/name topshell2
@@ -554,7 +468,6 @@
 /gate/topshell2/geometry/setPhiStart 270. deg
 /gate/topshell2/geometry/setDeltaPhi  90. deg
 /gate/topshell2/setMaterial Plastic
-#/gate/topshell2/vis/forceWireframe
 /gate/topshell2/vis/setColor yellow
 
 /gate/NEMA_IQ/daughters/name topshell3
@@ -566,7 +479,6 @@
 /gate/topshell3/geometry/setPhiStart 180. deg
 /gate/topshell3/geometry/setDeltaPhi  90. deg
 /gate/topshell3/setMaterial Plastic
-#/gate/topshell3/vis/forceWireframe
 /gate/topshell3/vis/setColor yellow
 
 /gate/NEMA_IQ/daughters/name topshell4
@@ -588,7 +500,6 @@
 /gate/bottomshell2/geometry/setPhiStart 270. deg
 /gate/bottomshell2/geometry/setDeltaPhi  90. deg
 /gate/bottomshell2/setMaterial Plastic
-#/gate/bottomshell2/vis/forceWireframe
 /gate/bottomshell2/vis/setColor yellow
 
 /gate/NEMA_IQ/daughters/name bottomshell3
@@ -600,7 +511,6 @@
 /gate/bottomshell3/geometry/setPhiStart 180. deg
 /gate/bottomshell3/geometry/setDeltaPhi  90. deg
 /gate/bottomshell3/setMaterial Plastic
-#/gate/bottomshell3/vis/forceWireframe
 /gate/bottomshell3/vis/setColor yellow
 
 /gate/NEMA_IQ/daughters/name bottomshell4
@@ -610,7 +520,6 @@
 /gate/bottomshell4/geometry/setYLength 8. cm
 /gate/bottomshell4/geometry/setZLength 0.3 cm
 /gate/bottomshell4/setMaterial Plastic
-#/gate/bottomshell4/vis/forceWireframe
 /gate/bottomshell4/vis/setColor yellow
 
 /gate/NEMA_IQ/attachPhantomSD
@@ -658,11 +567,6 @@
 /gate/bottomshell3/attachPhantomSD
 /gate/bottomshell4/attachPhantomSD
 
-# END EXECUTE phantom.mac
-
-
-# P H Y S I C S
-# BEGIN EXECUTE physics.mac
 /gate/physics/addProcess PhotoElectric gamma
 /gate/physics/processes/PhotoElectric/setModel LivermoreModel
 
@@ -677,28 +581,19 @@
 /gate/physics/Positron/SetCutInRegion world 10 mm
 
 /gate/physics/displayCuts
-# END EXECUTE physics.mac
 
-# I N I T I A L I Z A T I O N
 /gate/run/initialize
 
-# REGION CUTS
 /gate/physics/displayCuts
 
-# V I S U A L I S A T I O N
-# BEGIN EXECUTE visualisation.mac
 /vis/disable
-# END EXECUTE visualisation.mac
 
-#  P A R T I C L E   S O U R C E
-# BEGIN EXECUTE source.mac
 /gate/source/addSource                        upperinterior_hot_background PositroniumSource
 /gate/source/upperinterior_hot_background/gps/pos/centre     0.0 -3.5 0.0 cm
 /gate/source/upperinterior_hot_background/gps/pos/type       Volume
 /gate/source/upperinterior_hot_background/gps/pos/shape      Cylinder
 /gate/source/upperinterior_hot_background/gps/pos/radius     14.7 cm
 /gate/source/upperinterior_hot_background/gps/pos/halfz      10.7 cm
-## Source parameters
 /gate/source/upperinterior_hot_background/setActivity 7896686.4 Bq
 /gate/source/upperinterior_hot_background/setType Ps
 /gate/source/upperinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -707,7 +602,6 @@
 /gate/source/upperinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/upperinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/upperinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/upperinterior_hot_background/gps/particle   gamma
 /gate/source/upperinterior_hot_background/gps/Forbid     NEMA_IQ
 /gate/source/upperinterior_hot_background/gps/Forbid     NEMA_IQ_cold
@@ -752,7 +646,6 @@
 /gate/source/LRinterior_hot_background/gps/pos/shape         Cylinder
 /gate/source/LRinterior_hot_background/gps/pos/radius        7.7 cm
 /gate/source/LRinterior_hot_background/gps/pos/halfz         10.7 cm
-## Source parameters
 /gate/source/LRinterior_hot_background/setActivity    1089650.4 Bq
 /gate/source/LRinterior_hot_background/setType Ps
 /gate/source/LRinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -761,7 +654,6 @@
 /gate/source/LRinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/LRinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/LRinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/LRinterior_hot_background/gps/particle      gamma
 /gate/source/LRinterior_hot_background/gps/Forbid        upperinterior
 /gate/source/LRinterior_hot_background/gps/Forbid        boxinterior
@@ -783,7 +675,6 @@
 /gate/source/LLinterior_hot_background/gps/pos/shape         Cylinder
 /gate/source/LLinterior_hot_background/gps/pos/radius        7.7 cm
 /gate/source/LLinterior_hot_background/gps/pos/halfz         10.7 cm
-## Source parameters
 /gate/source/LLinterior_hot_background/setActivity    1089650.4 Bq
 /gate/source/LLinterior_hot_background/setType Ps
 /gate/source/LLinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -792,7 +683,6 @@
 /gate/source/LLinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/LLinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/LLinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/LLinterior_hot_background/gps/particle      gamma
 /gate/source/LLinterior_hot_background/gps/Forbid        upperinterior
 /gate/source/LLinterior_hot_background/gps/Forbid        boxinterior
@@ -815,7 +705,6 @@
 /gate/source/interiorbox_hot_background/gps/pos/halfx        7. cm
 /gate/source/interiorbox_hot_background/gps/pos/halfy        3.85 cm
 /gate/source/interiorbox_hot_background/gps/pos/halfz        10.7 cm
-## Source parameters
 /gate/source/interiorbox_hot_background/setActivity    2497445.5 Bq
 /gate/source/interiorbox_hot_background/setType Ps
 /gate/source/interiorbox_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -824,7 +713,6 @@
 /gate/source/interiorbox_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/interiorbox_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/interiorbox_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/interiorbox_hot_background/gps/particle     gamma
 /gate/source/interiorbox_hot_background/gps/Forbid       sphere22
 /gate/source/interiorbox_hot_background/gps/Forbid       sphere22in
@@ -842,7 +730,6 @@
 /gate/source/central_cylinder/gps/pos/shape         Cylinder
 /gate/source/central_cylinder/gps/pos/radius        2.1 cm
 /gate/source/central_cylinder/gps/pos/halfz         10.7 cm
-## Source parameters
 /gate/source/central_cylinder/setActivity    148242.3 Bq
 /gate/source/central_cylinder/setType Ps
 /gate/source/central_cylinder/setPositroniumFractions 0.13 0.75796 0.00204 0.04729 0.0258 0.01875 0.00769 0.00071 0.0012 0.00325 0.00531
@@ -853,14 +740,11 @@
 /gate/source/central_cylinder/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 MeV
 /gate/source/central_cylinder/gps/particle     gamma
 
-
-# 10 mm Sphere
 /gate/source/addSource                        sphere10mm PositroniumSource
 /gate/source/sphere10mm/gps/pos/centre            2.86 4.95367 3.7 cm
 /gate/source/sphere10mm/gps/pos/type              Volume
 /gate/source/sphere10mm/gps/pos/shape             Sphere
 /gate/source/sphere10mm/gps/pos/radius            0.5 cm
-## Source parameters
 /gate/source/sphere10mm/setActivity    3351.0 Bq
 /gate/source/sphere10mm/setType Ps
 /gate/source/sphere10mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -869,18 +753,14 @@
 /gate/source/sphere10mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere10mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere10mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere10mm/gps/particle          gamma
 
-
-# 10 mm Fill Capillary
 /gate/source/addSource                        capillary10mm PositroniumSource
 /gate/source/capillary10mm/gps/pos/centre         2.86 4.95367 7.5 cm
 /gate/source/capillary10mm/gps/pos/type           Volume
 /gate/source/capillary10mm/gps/pos/shape          Cylinder
 /gate/source/capillary10mm/gps/pos/radius         0.25 cm
 /gate/source/capillary10mm/gps/pos/halfz          3.2 cm
-## Source parameters
 /gate/source/capillary10mm/setActivity    1633.6 Bq
 /gate/source/capillary10mm/setType Ps
 /gate/source/capillary10mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -889,16 +769,13 @@
 /gate/source/capillary10mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary10mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary10mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary10mm/gps/particle       gamma
 
-# 13 mm Sphere
 /gate/source/addSource                        sphere13mm             PositroniumSource
 /gate/source/sphere13mm/gps/pos/centre            -2.86 4.95367 3.7 cm
 /gate/source/sphere13mm/gps/pos/type              Volume
 /gate/source/sphere13mm/gps/pos/shape             Sphere
 /gate/source/sphere13mm/gps/pos/radius            0.65 cm
-## Source parameters
 /gate/source/sphere13mm/setActivity    7362.2 Bq
 /gate/source/sphere13mm/setType Ps
 /gate/source/sphere13mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -907,17 +784,14 @@
 /gate/source/sphere13mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere13mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere13mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere13mm/gps/particle          gamma
 
-# 13 mm Fill Capillary
 /gate/source/addSource                        capillary13mm PositroniumSource
 /gate/source/capillary13mm/gps/pos/centre         -2.86 4.95367 7.5875 cm
 /gate/source/capillary13mm/gps/pos/type           Volume
 /gate/source/capillary13mm/gps/pos/shape          Cylinder
 /gate/source/capillary13mm/gps/pos/radius         0.25 cm
 /gate/source/capillary13mm/gps/pos/halfz          3.1125 cm
-## Source parameters
 /gate/source/capillary13mm/setActivity    1589.0 Bq
 /gate/source/capillary13mm/setType Ps
 /gate/source/capillary13mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -926,21 +800,14 @@
 /gate/source/capillary13mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary13mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary13mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary13mm/gps/particle       gamma
 
-# 17 mm Sphere
-## Source parameters
-## Forbid
-
-# 17 mm Fill Capillary
 /gate/source/addSource                        capillary17mm PositroniumSource
 /gate/source/capillary17mm/gps/pos/centre         -5.72 0. 7.675 cm
 /gate/source/capillary17mm/gps/pos/type           Volume
 /gate/source/capillary17mm/gps/pos/shape          Cylinder
 /gate/source/capillary17mm/gps/pos/radius         0.25 cm
 /gate/source/capillary17mm/gps/pos/halfz          3.025 cm
-## Source parameters
 /gate/source/capillary17mm/setActivity    1544.3 Bq
 /gate/source/capillary17mm/setType Ps
 /gate/source/capillary17mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -949,16 +816,13 @@
 /gate/source/capillary17mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary17mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary17mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary17mm/gps/particle       gamma
 
-# 22 mm Sphere
 /gate/source/addSource                        sphere22mm PositroniumSource
 /gate/source/sphere22mm/gps/pos/centre            -2.86 -4.95367 3.7 cm
 /gate/source/sphere22mm/gps/pos/type              Volume
 /gate/source/sphere22mm/gps/pos/shape             Sphere
 /gate/source/sphere22mm/gps/pos/radius            1.1 cm
-## Source parameters
 /gate/source/sphere22mm/setActivity    35681.8 Bq
 /gate/source/sphere22mm/setType Ps
 /gate/source/sphere22mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -967,17 +831,14 @@
 /gate/source/sphere22mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere22mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere22mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere22mm/gps/particle          gamma
 
-# 22 mm Fill Capillary
 /gate/source/addSource                        capillary22mm PositroniumSource
 /gate/source/capillary22mm/gps/pos/centre         -2.86 -4.95367 7.8 cm
 /gate/source/capillary22mm/gps/pos/type           Volume
 /gate/source/capillary22mm/gps/pos/shape          Cylinder
 /gate/source/capillary22mm/gps/pos/radius         0.25 cm
 /gate/source/capillary22mm/gps/pos/halfz          2.9 cm
-## Source parameters
 /gate/source/capillary22mm/setActivity    1480.5 Bq
 /gate/source/capillary22mm/setType Ps
 /gate/source/capillary22mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -986,18 +847,13 @@
 /gate/source/capillary22mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary22mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary22mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary22mm/gps/particle       gamma
 
-##########################################333
-
-# 28 mm Sphere
 /gate/source/addSource                        sphere28mm             PositroniumSource
 /gate/source/sphere28mm/gps/pos/centre            2.86 -4.95367 3.7 cm
 /gate/source/sphere28mm/gps/pos/type              Volume
 /gate/source/sphere28mm/gps/pos/shape             Sphere
 /gate/source/sphere28mm/gps/pos/radius            1.4 cm
-## Source parameters
 /gate/source/sphere28mm/setActivity    73561.9 Bq
 /gate/source/sphere28mm/setType Ps
 /gate/source/sphere28mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -1006,17 +862,14 @@
 /gate/source/sphere28mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere28mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere28mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere28mm/gps/particle          gamma
 
-# 28 mm Fill Capillary
 /gate/source/addSource                        capillary28mm PositroniumSource
 /gate/source/capillary28mm/gps/pos/centre         2.86 -4.95367 7.95 cm
 /gate/source/capillary28mm/gps/pos/type           Volume
 /gate/source/capillary28mm/gps/pos/shape          Cylinder
 /gate/source/capillary28mm/gps/pos/radius         0.25 cm
 /gate/source/capillary28mm/gps/pos/halfz          2.75 cm
-## Source parameters
 /gate/source/capillary28mm/setActivity    1403.9 Bq
 /gate/source/capillary28mm/setType Ps
 /gate/source/capillary28mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -1025,21 +878,14 @@
 /gate/source/capillary28mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary28mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary28mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary28mm/gps/particle       gamma
 
-# 37 mm Sphere
-## Source parameters
-## Forbid
-
-# 37 mm Fill Capillary
 /gate/source/addSource                        capillary37mm PositroniumSource
 /gate/source/capillary37mm/gps/pos/centre         5.72 0. 8.175 cm
 /gate/source/capillary37mm/gps/pos/type           Volume
 /gate/source/capillary37mm/gps/pos/shape          Cylinder
 /gate/source/capillary37mm/gps/pos/radius         0.25 cm
 /gate/source/capillary37mm/gps/pos/halfz          2.525 cm
-## Source parameters
 /gate/source/capillary37mm/setActivity    1289.0 Bq
 /gate/source/capillary37mm/setType Ps
 /gate/source/capillary37mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -1048,17 +894,10 @@
 /gate/source/capillary37mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary37mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary37mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary37mm/gps/particle       gamma
-
 
 /gate/source/list
 
-# END EXECUTE source.mac
-
-
-#  D A T A   O U T P U T
-# BEGIN EXECUTE output.mac
 /gate/output/analysis/disable  
 /gate/output/fastanalysis/disable  
 /gate/output/multianalysis/enable
@@ -1072,24 +911,13 @@
 /gate/output/multianalysis/verbose 1  
 /gate/output/multianalysis/describe
 
-# END EXECUTE output.mac
-
-
-#  R A N D O M   E N G I N E  A N D  S E E D
-# BEGIN EXECUTE random.mac
 /gate/random/setEngineName JamesRandom
 /gate/random/setEngineSeed 426405530
 
 /gate/random/verbose 1
 
-# END EXECUTE random.mac
-
-
-# S I M U L A T I O N
-# BEGIN EXECUTE application.mac
 /gate/application/setTimeSlice   1.0 s
 /gate/application/setTimeStart   0 s
 /gate/application/setTimeStop    1.0 s
 /gate/application/startDAQ
 
-# END EXECUTE application.mac

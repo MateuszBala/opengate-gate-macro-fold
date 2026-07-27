@@ -4,7 +4,6 @@
 /gate/source/upperinterior_hot_background/gps/pos/shape      Cylinder
 /gate/source/upperinterior_hot_background/gps/pos/radius     14.7 cm
 /gate/source/upperinterior_hot_background/gps/pos/halfz      10.7 cm
-## Source parameters
 /gate/source/upperinterior_hot_background/setActivity 7896686.4 Bq
 /gate/source/upperinterior_hot_background/setType Ps
 /gate/source/upperinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -13,7 +12,6 @@
 /gate/source/upperinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/upperinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/upperinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/upperinterior_hot_background/gps/particle   gamma
 /gate/source/upperinterior_hot_background/gps/Forbid     NEMA_IQ
 /gate/source/upperinterior_hot_background/gps/Forbid     NEMA_IQ_cold
@@ -58,7 +56,6 @@
 /gate/source/LRinterior_hot_background/gps/pos/shape         Cylinder
 /gate/source/LRinterior_hot_background/gps/pos/radius        7.7 cm
 /gate/source/LRinterior_hot_background/gps/pos/halfz         10.7 cm
-## Source parameters
 /gate/source/LRinterior_hot_background/setActivity    1089650.4 Bq
 /gate/source/LRinterior_hot_background/setType Ps
 /gate/source/LRinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -67,7 +64,6 @@
 /gate/source/LRinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/LRinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/LRinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/LRinterior_hot_background/gps/particle      gamma
 /gate/source/LRinterior_hot_background/gps/Forbid        upperinterior
 /gate/source/LRinterior_hot_background/gps/Forbid        boxinterior
@@ -89,7 +85,6 @@
 /gate/source/LLinterior_hot_background/gps/pos/shape         Cylinder
 /gate/source/LLinterior_hot_background/gps/pos/radius        7.7 cm
 /gate/source/LLinterior_hot_background/gps/pos/halfz         10.7 cm
-## Source parameters
 /gate/source/LLinterior_hot_background/setActivity    1089650.4 Bq
 /gate/source/LLinterior_hot_background/setType Ps
 /gate/source/LLinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -98,7 +93,6 @@
 /gate/source/LLinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/LLinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/LLinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/LLinterior_hot_background/gps/particle      gamma
 /gate/source/LLinterior_hot_background/gps/Forbid        upperinterior
 /gate/source/LLinterior_hot_background/gps/Forbid        boxinterior
@@ -121,7 +115,6 @@
 /gate/source/interiorbox_hot_background/gps/pos/halfx        7. cm
 /gate/source/interiorbox_hot_background/gps/pos/halfy        3.85 cm
 /gate/source/interiorbox_hot_background/gps/pos/halfz        10.7 cm
-## Source parameters
 /gate/source/interiorbox_hot_background/setActivity    2497445.5 Bq
 /gate/source/interiorbox_hot_background/setType Ps
 /gate/source/interiorbox_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
@@ -130,7 +123,6 @@
 /gate/source/interiorbox_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/interiorbox_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/interiorbox_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/interiorbox_hot_background/gps/particle     gamma
 /gate/source/interiorbox_hot_background/gps/Forbid       sphere22
 /gate/source/interiorbox_hot_background/gps/Forbid       sphere22in
@@ -148,7 +140,6 @@
 /gate/source/central_cylinder/gps/pos/shape         Cylinder
 /gate/source/central_cylinder/gps/pos/radius        2.1 cm
 /gate/source/central_cylinder/gps/pos/halfz         10.7 cm
-## Source parameters
 /gate/source/central_cylinder/setActivity    148242.3 Bq
 /gate/source/central_cylinder/setType Ps
 /gate/source/central_cylinder/setPositroniumFractions 0.13 0.75796 0.00204 0.04729 0.0258 0.01875 0.00769 0.00071 0.0012 0.00325 0.00531
@@ -159,14 +150,11 @@
 /gate/source/central_cylinder/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 MeV
 /gate/source/central_cylinder/gps/particle     gamma
 
-
-# 10 mm Sphere
 /gate/source/addSource                        sphere10mm PositroniumSource
 /gate/source/sphere10mm/gps/pos/centre            2.86 4.95367 3.7 cm
 /gate/source/sphere10mm/gps/pos/type              Volume
 /gate/source/sphere10mm/gps/pos/shape             Sphere
 /gate/source/sphere10mm/gps/pos/radius            0.5 cm
-## Source parameters
 /gate/source/sphere10mm/setActivity    3351.0 Bq
 /gate/source/sphere10mm/setType Ps
 /gate/source/sphere10mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -175,18 +163,14 @@
 /gate/source/sphere10mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere10mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere10mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere10mm/gps/particle          gamma
 
-
-# 10 mm Fill Capillary
 /gate/source/addSource                        capillary10mm PositroniumSource
 /gate/source/capillary10mm/gps/pos/centre         2.86 4.95367 7.5 cm
 /gate/source/capillary10mm/gps/pos/type           Volume
 /gate/source/capillary10mm/gps/pos/shape          Cylinder
 /gate/source/capillary10mm/gps/pos/radius         0.25 cm
 /gate/source/capillary10mm/gps/pos/halfz          3.2 cm
-## Source parameters
 /gate/source/capillary10mm/setActivity    1633.6 Bq
 /gate/source/capillary10mm/setType Ps
 /gate/source/capillary10mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -195,16 +179,13 @@
 /gate/source/capillary10mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary10mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary10mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary10mm/gps/particle       gamma
 
-# 13 mm Sphere
 /gate/source/addSource                        sphere13mm             PositroniumSource
 /gate/source/sphere13mm/gps/pos/centre            -2.86 4.95367 3.7 cm
 /gate/source/sphere13mm/gps/pos/type              Volume
 /gate/source/sphere13mm/gps/pos/shape             Sphere
 /gate/source/sphere13mm/gps/pos/radius            0.65 cm
-## Source parameters
 /gate/source/sphere13mm/setActivity    7362.2 Bq
 /gate/source/sphere13mm/setType Ps
 /gate/source/sphere13mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -213,17 +194,14 @@
 /gate/source/sphere13mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere13mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere13mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere13mm/gps/particle          gamma
 
-# 13 mm Fill Capillary
 /gate/source/addSource                        capillary13mm PositroniumSource
 /gate/source/capillary13mm/gps/pos/centre         -2.86 4.95367 7.5875 cm
 /gate/source/capillary13mm/gps/pos/type           Volume
 /gate/source/capillary13mm/gps/pos/shape          Cylinder
 /gate/source/capillary13mm/gps/pos/radius         0.25 cm
 /gate/source/capillary13mm/gps/pos/halfz          3.1125 cm
-## Source parameters
 /gate/source/capillary13mm/setActivity    1589.0 Bq
 /gate/source/capillary13mm/setType Ps
 /gate/source/capillary13mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -232,21 +210,14 @@
 /gate/source/capillary13mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary13mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary13mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary13mm/gps/particle       gamma
 
-# 17 mm Sphere
-## Source parameters
-## Forbid
-
-# 17 mm Fill Capillary
 /gate/source/addSource                        capillary17mm PositroniumSource
 /gate/source/capillary17mm/gps/pos/centre         -5.72 0. 7.675 cm
 /gate/source/capillary17mm/gps/pos/type           Volume
 /gate/source/capillary17mm/gps/pos/shape          Cylinder
 /gate/source/capillary17mm/gps/pos/radius         0.25 cm
 /gate/source/capillary17mm/gps/pos/halfz          3.025 cm
-## Source parameters
 /gate/source/capillary17mm/setActivity    1544.3 Bq
 /gate/source/capillary17mm/setType Ps
 /gate/source/capillary17mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -255,16 +226,13 @@
 /gate/source/capillary17mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary17mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary17mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary17mm/gps/particle       gamma
 
-# 22 mm Sphere
 /gate/source/addSource                        sphere22mm PositroniumSource
 /gate/source/sphere22mm/gps/pos/centre            -2.86 -4.95367 3.7 cm
 /gate/source/sphere22mm/gps/pos/type              Volume
 /gate/source/sphere22mm/gps/pos/shape             Sphere
 /gate/source/sphere22mm/gps/pos/radius            1.1 cm
-## Source parameters
 /gate/source/sphere22mm/setActivity    35681.8 Bq
 /gate/source/sphere22mm/setType Ps
 /gate/source/sphere22mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -273,17 +241,14 @@
 /gate/source/sphere22mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere22mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere22mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere22mm/gps/particle          gamma
 
-# 22 mm Fill Capillary
 /gate/source/addSource                        capillary22mm PositroniumSource
 /gate/source/capillary22mm/gps/pos/centre         -2.86 -4.95367 7.8 cm
 /gate/source/capillary22mm/gps/pos/type           Volume
 /gate/source/capillary22mm/gps/pos/shape          Cylinder
 /gate/source/capillary22mm/gps/pos/radius         0.25 cm
 /gate/source/capillary22mm/gps/pos/halfz          2.9 cm
-## Source parameters
 /gate/source/capillary22mm/setActivity    1480.5 Bq
 /gate/source/capillary22mm/setType Ps
 /gate/source/capillary22mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
@@ -292,18 +257,13 @@
 /gate/source/capillary22mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary22mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary22mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary22mm/gps/particle       gamma
 
-##########################################333
-
-# 28 mm Sphere
 /gate/source/addSource                        sphere28mm             PositroniumSource
 /gate/source/sphere28mm/gps/pos/centre            2.86 -4.95367 3.7 cm
 /gate/source/sphere28mm/gps/pos/type              Volume
 /gate/source/sphere28mm/gps/pos/shape             Sphere
 /gate/source/sphere28mm/gps/pos/radius            1.4 cm
-## Source parameters
 /gate/source/sphere28mm/setActivity    73561.9 Bq
 /gate/source/sphere28mm/setType Ps
 /gate/source/sphere28mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -312,17 +272,14 @@
 /gate/source/sphere28mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/sphere28mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/sphere28mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/sphere28mm/gps/particle          gamma
 
-# 28 mm Fill Capillary
 /gate/source/addSource                        capillary28mm PositroniumSource
 /gate/source/capillary28mm/gps/pos/centre         2.86 -4.95367 7.95 cm
 /gate/source/capillary28mm/gps/pos/type           Volume
 /gate/source/capillary28mm/gps/pos/shape          Cylinder
 /gate/source/capillary28mm/gps/pos/radius         0.25 cm
 /gate/source/capillary28mm/gps/pos/halfz          2.75 cm
-## Source parameters
 /gate/source/capillary28mm/setActivity    1403.9 Bq
 /gate/source/capillary28mm/setType Ps
 /gate/source/capillary28mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -331,21 +288,14 @@
 /gate/source/capillary28mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary28mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary28mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary28mm/gps/particle       gamma
 
-# 37 mm Sphere
-## Source parameters
-## Forbid
-
-# 37 mm Fill Capillary
 /gate/source/addSource                        capillary37mm PositroniumSource
 /gate/source/capillary37mm/gps/pos/centre         5.72 0. 8.175 cm
 /gate/source/capillary37mm/gps/pos/type           Volume
 /gate/source/capillary37mm/gps/pos/shape          Cylinder
 /gate/source/capillary37mm/gps/pos/radius         0.25 cm
 /gate/source/capillary37mm/gps/pos/halfz          2.525 cm
-## Source parameters
 /gate/source/capillary37mm/setActivity    1289.0 Bq
 /gate/source/capillary37mm/setType Ps
 /gate/source/capillary37mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
@@ -354,8 +304,6 @@
 /gate/source/capillary37mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
 /gate/source/capillary37mm/setPromptPhotonProbabilites 1 1 1 1 1
 /gate/source/capillary37mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
-## Forbid
 /gate/source/capillary37mm/gps/particle       gamma
-
 
 /gate/source/list
