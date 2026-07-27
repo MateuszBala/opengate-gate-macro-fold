@@ -1,5 +1,3 @@
-# NEMA IEC 2001 IQ PHANTOM
-
 /gate/world/daughters/name NEMA_IQ
 /gate/world/daughters/insert box
 /gate/NEMA_IQ/placement/setTranslation 0.0 0.0 0.0 cm
@@ -519,4 +517,3 @@
 /gate/bottomshell2/attachPhantomSD
 /gate/bottomshell3/attachPhantomSD
 /gate/bottomshell4/attachPhantomSD
-

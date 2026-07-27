@@ -142,9 +142,9 @@ def test_main_unfolds_mono_macro_file_into_set_of_macro_files(tmp_path: Path) ->
     # Arrange
     mono_path = tmp_path / "macro.mac"
     mono_path.write_text(
-        "# BEGIN EXECUTE detector.mac\n"
+        "# GEOMETRY SECTION\n"
         "/gate/geometry/setMaterialDatabase GateMaterials.db\n"
-        "# END EXECUTE detector.mac\n",
+        "/gate/run/initialize\n",
         encoding="utf-8",
     )
     output_dir = tmp_path / "out"
@@ -162,11 +162,12 @@ def test_main_unfolds_mono_macro_file_into_set_of_macro_files(tmp_path: Path) ->
 
     # Assert
     assert exit_code == 0
-    assert (output_dir / "detector.mac").read_text(encoding="utf-8") == (
+    assert (output_dir / "geometry.mac").read_text(encoding="utf-8") == (
         "/gate/geometry/setMaterialDatabase GateMaterials.db\n"
     )
-    main_content = (output_dir / "main.mac").read_text(encoding="utf-8")
-    assert "/control/execute detector.mac" in main_content
+    assert (output_dir / "main.mac").read_text(encoding="utf-8") == (
+        "# GEOMETRY SECTION\n/control/execute geometry.mac\n/gate/run/initialize\n"
+    )
 
 
 def test_main_folds_set_of_macro_files_into_mono_macro_file(tmp_path: Path) -> None:
@@ -175,11 +176,7 @@ def test_main_folds_set_of_macro_files_into_mono_macro_file(tmp_path: Path) -> N
     macros_dir = tmp_path / "macros"
     macros_dir.mkdir()
     (macros_dir / "main.mac").write_text(
-        "# BEGIN EXECUTE detector.mac\n"
-        "\n"
-        "/control/execute detector.mac\n"
-        "\n"
-        "# END EXECUTE detector.mac\n",
+        "# GEOMETRY SECTION\n/control/execute detector.mac\n/gate/run/initialize\n",
         encoding="utf-8",
     )
     (macros_dir / "detector.mac").write_text(
@@ -204,9 +201,9 @@ def test_main_folds_set_of_macro_files_into_mono_macro_file(tmp_path: Path) -> N
     # Assert
     assert exit_code == 0
     assert (output_dir / "example.mac").read_text(encoding="utf-8") == (
-        "# BEGIN EXECUTE detector.mac\n"
+        "# GEOMETRY SECTION\n"
         "/gate/geometry/setMaterialDatabase GateMaterials.db\n"
-        "# END EXECUTE detector.mac\n"
+        "/gate/run/initialize\n"
     )
 
 

@@ -1,5 +1,11 @@
 """Combine a set of macro files into a single mono macro file.
 
+Folding replaces every ``/control/execute`` call in the main macro file with
+the content of the referenced macro file. References are resolved by exact
+file name first and case-insensitively as a fallback; references to files
+that were not provided stay verbatim, since a macro may legitimately call
+external macros that are not part of the folded set.
+
 Public objects
 --------------
 fold
@@ -7,8 +13,11 @@ fold
     file.
 """
 
+import re
+
 from ..io.macrofile import MacroContent, MacroFile
-from .document import ExecuteBlock, parse_document, render_document
+
+_EXECUTE_RE = re.compile(r"^/control/execute\s+(\S+)\s*$")
 
 
 def fold(main_file: MacroFile, block_files: list[MacroFile]) -> MacroFile:
@@ -18,54 +27,53 @@ def fold(main_file: MacroFile, block_files: list[MacroFile]) -> MacroFile:
     ----------
     main_file : MacroFile
         The main macro file, referring to block macro files through
-        ``/control/execute`` calls inside ``BEGIN EXECUTE``/``END EXECUTE``
-        blocks.
+        ``/control/execute`` calls.
     block_files : list[MacroFile]
-        The macro files referenced by ``main_file``.
+        The macro files that may be referenced by ``main_file``.
 
     Returns
     -------
     MacroFile
         The combined mono macro file. Its ``name`` is left unset; the
         caller is expected to assign one.
-
-    Raises
-    ------
-    ValueError
-        If ``main_file`` references a block macro file that is not present
-        in ``block_files``.
     """
-    blocks_by_name: dict[str, MacroFile] = {
+    by_name: dict[str, MacroFile] = {
         block_file.name: block_file for block_file in block_files if block_file.name is not None
     }
+    by_lower_name: dict[str, MacroFile] = {name.lower(): file for name, file in by_name.items()}
 
-    document = parse_document(main_file.content)
-    folded_document = [
-        ExecuteBlock(name=segment.name, body=_resolve_body(segment.name, blocks_by_name))
-        if isinstance(segment, ExecuteBlock)
-        else segment
-        for segment in document
-    ]
+    content: list[str] = []
+    for line in main_file.content:
+        match = _EXECUTE_RE.match(line)
+        block_file = None
+        if match is not None:
+            reference = match.group(1)
+            block_file = by_name.get(reference) or by_lower_name.get(reference.lower())
+        if block_file is None:
+            content.append(line)
+        else:
+            content.extend(_stripped_content(block_file))
 
     return MacroFile(
-        content=render_document(folded_document, as_control_execute=False),
+        content=content,
         is_mono_macro=True,
         content_type=MacroContent.MONO_MACRO,
     )
 
 
-def _resolve_body(name: str, blocks_by_name: dict[str, MacroFile]) -> list[str]:
-    """Return the content of the block macro file named ``name``.
+def _stripped_content(block_file: MacroFile) -> list[str]:
+    """Content of a block file without leading/trailing blank lines.
 
-    A missing trailing newline on the last line is completed, since the
-    block body is followed by the ``# END EXECUTE`` marker line rather than
-    the end of the file.
+    The surrounding spacing lives in the main macro file, so outer blank
+    lines of the block file must not be duplicated into the mono macro. The
+    last line is completed with a newline, since the spliced content is
+    always followed by further main macro lines.
     """
-    block_file = blocks_by_name.get(name)
-    if block_file is None:
-        raise ValueError(f"Missing macro file for execute block '{name}'.")
-
-    body = block_file.content
-    if body and not body[-1].endswith("\n"):
-        body = [*body[:-1], f"{body[-1]}\n"]
-    return body
+    lines = list(block_file.content)
+    while lines and lines[0].strip() == "":
+        lines = lines[1:]
+    while lines and lines[-1].strip() == "":
+        lines = lines[:-1]
+    if lines and not lines[-1].endswith("\n"):
+        lines[-1] = f"{lines[-1]}\n"
+    return lines
