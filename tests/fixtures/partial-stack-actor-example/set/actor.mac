@@ -1,0 +1,41 @@
+#============================================================================================
+# Creating local actor and attaching it to selected volume (here "detector" from Geometry.mac)
+#============================================================================================
+/gate/actor/addActor LocalActor JPActor
+/gate/actor/JPActor/attachTo detector
+
+#============================================================================================
+# Setting up global actor
+# Commands "enable" describe what save, while commands "filter" describe saving conditions.
+# Description of all enable commands for Global Actor can be found in repository directory:
+# source/digits_hits/src/GateGlobalActorMessenger.cc
+#============================================================================================
+
+/gate/actor/JPActor/global/saveTo example4_two_sources.root #where save data
+
+#============================================================================================
+# Enable commands
+#
+# Try this: if you comment out some below lines you will receive less data
+#============================================================================================
+
+/gate/actor/JPActor/global/enableEventID
+/gate/actor/JPActor/global/enableTrackID
+/gate/actor/JPActor/global/enableProcessName
+/gate/actor/JPActor/global/enableProcessPosition
+/gate/actor/JPActor/global/enableEmissionPointFromSource
+/gate/actor/JPActor/global/enableEnergyBeforeProcess
+/gate/actor/JPActor/global/enableEnergyLossDuringProcess
+/gate/actor/JPActor/global/enableVolumeName
+
+#============================================================================================
+# Saving conditions - filter commands
+#
+# Try this: if you comment out below lines with "#" you will receive a lot of data for
+# different processes and particles. Otherwise you will have only data for gamma which
+# dispersed in Compton scattering
+#============================================================================================
+
+/gate/actor/JPActor/global/filterParticleName gamma #save only data for gamma, this command can be called more then once
+/gate/actor/JPActor/global/filterProcessName Compton #save only for process with name "Compton"
+

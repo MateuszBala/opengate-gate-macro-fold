@@ -1,0 +1,21 @@
+#==========================================================================================
+# Way no 1: By demanding a concrete number of events to be generated
+# Example: if you have source with activity 1kBq you will receive 10^5 events
+#==========================================================================================
+
+/gate/application/setTotalNumberOfPrimaries 100000
+
+#==========================================================================================
+# Way no 2: By describing simulation time and length of time step.
+# Example: if you have source with activity 1kBq and you set time interval for 10 seconds
+# with time step equal 1 s, at the end you will receive 10^4 events
+#==========================================================================================
+
+#/gate/application/setTimeSlice 1. s
+#/gate/application/setTimeStart 0. s
+#/gate/application/setTimeStop 10. s
+
+#==========================================================================================
+# Run a simulation
+#==========================================================================================
+/gate/application/startDAQ

@@ -1,0 +1,563 @@
+# G E O M E T R Y
+# BEGIN EXECUTE detector.mac
+/gate/geometry/setMaterialDatabase GateMaterials.db
+# WORLD INITIALIZATION
+
+/gate/world/geometry/setXLength 2000. mm
+/gate/world/geometry/setYLength 2000. mm
+/gate/world/geometry/setZLength 2000. mm
+/gate/world/vis/forceWireframe 1
+/gate/world/vis/forceSolid 0
+/gate/world/vis/setColor white
+/gate/world/setMaterial Vacuum
+
+# SCANNER
+
+/gate/world/daughters/name cylindricalPET
+/gate/world/daughters/insert cylinder
+/gate/cylindricalPET/setMaterial Vacuum
+/gate/cylindricalPET/geometry/setRmin 409.0 mm
+/gate/cylindricalPET/geometry/setRmax 500.0 mm
+/gate/cylindricalPET/geometry/setHeight 1060 mm
+/gate/cylindricalPET/vis/forceWireframe
+/gate/cylindricalPET/vis/setColor white
+
+# DEA_LINE (rsector)
+
+/gate/cylindricalPET/daughters/name rsector
+/gate/cylindricalPET/daughters/insert box
+/gate/rsector/placement/setTranslation 0.0 420.0 0.0 mm
+/gate/rsector/geometry/setXLength 64.6 mm
+/gate/rsector/geometry/setYLength 20.0 mm
+/gate/rsector/geometry/setZLength 263.2 mm
+/gate/rsector/setMaterial Vacuum
+/gate/rsector/vis/forceWireframe 1
+/gate/rsector/vis/forceSolid 0
+/gate/rsector/vis/setColor blue
+
+# DET_MODULE (module)
+
+/gate/rsector/daughters/name module
+/gate/rsector/daughters/insert box
+/gate/module/geometry/setXLength 64.6 mm
+/gate/module/geometry/setYLength 20.0 mm
+/gate/module/geometry/setZLength 32.2 mm
+/gate/module/setMaterial Vacuum
+/gate/module/vis/forceWireframe 1
+/gate/module/vis/forceSolid 0
+/gate/module/vis/setColor yellow
+
+# MINIBLOCK (submodule)
+
+/gate/module/daughters/name submodule
+/gate/module/daughters/insert box
+/gate/submodule/geometry/setXLength 16.0 mm
+/gate/submodule/geometry/setYLength 20.0 mm
+/gate/submodule/geometry/setZLength 16.0 mm
+/gate/submodule/setMaterial Vacuum
+/gate/submodule/vis/forceWireframe 1
+/gate/submodule/vis/forceSolid 0
+/gate/submodule/vis/setColor red
+
+# CRYSTAL
+
+/gate/submodule/daughters/name crystal
+/gate/submodule/daughters/insert box
+/gate/crystal/placement/setTranslation 0.0 0.0 0.0 mm
+/gate/crystal/geometry/setXLength 3.2 mm
+/gate/crystal/geometry/setYLength 20.0 mm
+/gate/crystal/geometry/setZLength 3.2 mm
+/gate/crystal/setMaterial Vacuum
+/gate/crystal/vis/forceWireframe 0
+/gate/crystal/vis/forceSolid 1
+/gate/crystal/vis/setColor white
+
+# LAYER 
+
+/gate/crystal/daughters/name layer0
+/gate/crystal/daughters/insert box
+/gate/layer0/placement/setTranslation 0.0 0.0 0.0 mm
+/gate/layer0/geometry/setXLength 3.2 mm
+/gate/layer0/geometry/setYLength 20.0 mm
+/gate/layer0/geometry/setZLength 3.2 mm
+/gate/layer0/setMaterial LSO
+/gate/layer0/vis/forceWireframe 0
+/gate/layer0/vis/forceSolid 1
+/gate/layer0/vis/setColor cyan
+
+# CRYSTAL REPEATER
+
+/gate/crystal/repeaters/insert cubicArray
+/gate/crystal/cubicArray/setRepeatNumberX 5
+/gate/crystal/cubicArray/setRepeatNumberY 1
+/gate/crystal/cubicArray/setRepeatNumberZ 5
+/gate/crystal/cubicArray/setRepeatVector 3.2 0. 3.2 mm
+
+# MINIBLOCK REPEATER
+
+/gate/submodule/repeaters/insert cubicArray
+/gate/submodule/cubicArray/setRepeatNumberX 4
+/gate/submodule/cubicArray/setRepeatNumberY 1
+/gate/submodule/cubicArray/setRepeatNumberZ 2
+/gate/submodule/cubicArray/setRepeatVector 16.2 0. 16.2 mm
+
+# DET_MODULE REPEATER
+
+/gate/module/repeaters/insert cubicArray
+/gate/module/cubicArray/setRepeatNumberX 1
+/gate/module/cubicArray/setRepeatNumberY 1
+/gate/module/cubicArray/setRepeatNumberZ 8
+/gate/module/cubicArray/setRepeatVector 0. 0. 33.0 mm
+
+# DEA_LINE REPEATER
+
+/gate/rsector/repeaters/insert cubicArray
+/gate/rsector/cubicArray/setRepeatNumberX 1
+/gate/rsector/cubicArray/setRepeatNumberY 1
+/gate/rsector/cubicArray/setRepeatNumberZ 4
+/gate/rsector/cubicArray/setRepeatVector 0. 0. 265.6 mm
+/gate/rsector/repeaters/insert ring
+/gate/rsector/ring/setRepeatNumber 38
+/gate/rsector/ring/enableAutoRotation
+
+# SYSTEM
+
+/gate/systems/cylindricalPET/rsector/attach rsector
+/gate/systems/cylindricalPET/module/attach module
+/gate/systems/cylindricalPET/submodule/attach submodule
+/gate/systems/cylindricalPET/layer0/attach layer0
+/gate/systems/cylindricalPET/crystal/attach crystal
+
+/gate/layer0/attachCrystalSD
+
+# END EXECUTE detector.mac
+
+
+# P H Y S I C S
+# BEGIN EXECUTE physics.mac
+/gate/physics/addProcess PhotoElectric gamma
+/gate/physics/processes/PhotoElectric/setModel LivermoreModel
+
+/gate/physics/addProcess Compton gamma
+/gate/physics/processes/Compton/setModel LivermorePolarizedModel
+
+/gate/physics/processList Enabled
+/gate/physics/processList Initialized
+
+/gate/physics/Gamma/SetCutInRegion world 10 mm
+/gate/physics/Electron/SetCutInRegion world 10 mm
+/gate/physics/Positron/SetCutInRegion world 10 mm
+
+/gate/physics/displayCuts
+# END EXECUTE physics.mac
+
+# I N I T I A L I Z A T I O N
+/gate/run/initialize
+
+# REGION CUTS
+/gate/physics/displayCuts
+
+#  P A R T I C L E   S O U R C E
+# BEGIN EXECUTE source.mac
+
+/gate/source/addSource                        upperinterior_hot_background PositroniumSource
+/gate/source/upperinterior_hot_background/gps/pos/centre     0.0 -3.5 0.0 cm
+/gate/source/upperinterior_hot_background/gps/pos/type       Volume
+/gate/source/upperinterior_hot_background/gps/pos/shape      Cylinder
+/gate/source/upperinterior_hot_background/gps/pos/radius     14.7 cm
+/gate/source/upperinterior_hot_background/gps/pos/halfz      10.7 cm
+## Source parameters
+/gate/source/upperinterior_hot_background/setActivity 7896686.4 Bq
+/gate/source/upperinterior_hot_background/setType Ps
+/gate/source/upperinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
+/gate/source/upperinterior_hot_background/setPositroniumLifetimes 0.14 0.4 0.4 1.8 1.8 ns
+/gate/source/upperinterior_hot_background/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/upperinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/upperinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/upperinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/upperinterior_hot_background/gps/particle   gamma
+/gate/source/upperinterior_hot_background/gps/Forbid     NEMA_IQ
+/gate/source/upperinterior_hot_background/gps/Forbid     NEMA_IQ_cold
+/gate/source/upperinterior_hot_background/gps/Forbid     centercyl
+/gate/source/upperinterior_hot_background/gps/Forbid     centercylin
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere10
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere10in
+/gate/source/upperinterior_hot_background/gps/Forbid     fill10
+/gate/source/upperinterior_hot_background/gps/Forbid     fill10in
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere13
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere13in
+/gate/source/upperinterior_hot_background/gps/Forbid     fill13
+/gate/source/upperinterior_hot_background/gps/Forbid     fill13in
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere17
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere17in
+/gate/source/upperinterior_hot_background/gps/Forbid     fill17
+/gate/source/upperinterior_hot_background/gps/Forbid     fill17in
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere37
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere37in
+/gate/source/upperinterior_hot_background/gps/Forbid     fill37
+/gate/source/upperinterior_hot_background/gps/Forbid     fill37in
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere22
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere22in
+/gate/source/upperinterior_hot_background/gps/Forbid     fill22
+/gate/source/upperinterior_hot_background/gps/Forbid     fill22in
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere28
+/gate/source/upperinterior_hot_background/gps/Forbid     sphere28in
+/gate/source/upperinterior_hot_background/gps/Forbid     fill28
+/gate/source/upperinterior_hot_background/gps/Forbid     fill28in
+/gate/source/upperinterior_hot_background/gps/Forbid     boxinterior
+/gate/source/upperinterior_hot_background/gps/Forbid     LLinterior
+/gate/source/upperinterior_hot_background/gps/Forbid     LRinterior
+/gate/source/upperinterior_hot_background/gps/Forbid     outershell1
+/gate/source/upperinterior_hot_background/gps/Forbid     outershell2
+/gate/source/upperinterior_hot_background/gps/Forbid     outershell3
+/gate/source/upperinterior_hot_background/gps/Forbid     outershell4
+/gate/source/upperinterior_hot_background/dump           35
+
+/gate/source/addSource                        LRinterior_hot_background PositroniumSource
+/gate/source/LRinterior_hot_background/gps/pos/centre        -7.0 -3.5 0.0 cm
+/gate/source/LRinterior_hot_background/gps/pos/type          Volume
+/gate/source/LRinterior_hot_background/gps/pos/shape         Cylinder
+/gate/source/LRinterior_hot_background/gps/pos/radius        7.7 cm
+/gate/source/LRinterior_hot_background/gps/pos/halfz         10.7 cm
+## Source parameters
+/gate/source/LRinterior_hot_background/setActivity    1089650.4 Bq
+/gate/source/LRinterior_hot_background/setType Ps
+/gate/source/LRinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
+/gate/source/LRinterior_hot_background/setPositroniumLifetimes 0.14 0.4 0.4 1.8 1.8 ns
+/gate/source/LRinterior_hot_background/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/LRinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/LRinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/LRinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/LRinterior_hot_background/gps/particle      gamma
+/gate/source/LRinterior_hot_background/gps/Forbid        upperinterior
+/gate/source/LRinterior_hot_background/gps/Forbid        boxinterior
+/gate/source/LRinterior_hot_background/gps/Forbid        centercyl
+/gate/source/LRinterior_hot_background/gps/Forbid        centercylin
+/gate/source/LRinterior_hot_background/gps/Forbid        sphere17
+/gate/source/LRinterior_hot_background/gps/Forbid        sphere17in
+/gate/source/LRinterior_hot_background/gps/Forbid        fill17
+/gate/source/LRinterior_hot_background/gps/Forbid        fill17in
+/gate/source/LRinterior_hot_background/gps/Forbid        sphere22
+/gate/source/LRinterior_hot_background/gps/Forbid        sphere22in
+/gate/source/LRinterior_hot_background/gps/Forbid        fill22
+/gate/source/LRinterior_hot_background/gps/Forbid        fill22in
+/gate/source/LRinterior_hot_background/dump              12
+
+/gate/source/addSource                        LLinterior_hot_background PositroniumSource
+/gate/source/LLinterior_hot_background/gps/pos/centre        7.0 -3.5 0.0 cm
+/gate/source/LLinterior_hot_background/gps/pos/type          Volume
+/gate/source/LLinterior_hot_background/gps/pos/shape         Cylinder
+/gate/source/LLinterior_hot_background/gps/pos/radius        7.7 cm
+/gate/source/LLinterior_hot_background/gps/pos/halfz         10.7 cm
+## Source parameters
+/gate/source/LLinterior_hot_background/setActivity    1089650.4 Bq
+/gate/source/LLinterior_hot_background/setType Ps
+/gate/source/LLinterior_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
+/gate/source/LLinterior_hot_background/setPositroniumLifetimes 0.14 0.4 0.4 1.8 1.8 ns
+/gate/source/LLinterior_hot_background/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/LLinterior_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/LLinterior_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/LLinterior_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/LLinterior_hot_background/gps/particle      gamma
+/gate/source/LLinterior_hot_background/gps/Forbid        upperinterior
+/gate/source/LLinterior_hot_background/gps/Forbid        boxinterior
+/gate/source/LLinterior_hot_background/gps/Forbid        centercyl
+/gate/source/LLinterior_hot_background/gps/Forbid        centercylin
+/gate/source/LLinterior_hot_background/gps/Forbid        sphere28
+/gate/source/LLinterior_hot_background/gps/Forbid        sphere28in
+/gate/source/LLinterior_hot_background/gps/Forbid        fill28
+/gate/source/LLinterior_hot_background/gps/Forbid        fill28in
+/gate/source/LLinterior_hot_background/gps/Forbid        sphere37
+/gate/source/LLinterior_hot_background/gps/Forbid        sphere37in
+/gate/source/LLinterior_hot_background/gps/Forbid        fill37
+/gate/source/LLinterior_hot_background/gps/Forbid        fill37in
+/gate/source/LLinterior_hot_background/dump              12
+
+/gate/source/addSource                        interiorbox_hot_background PositroniumSource
+/gate/source/interiorbox_hot_background/gps/pos/centre       0.0 -7.35 0.0 cm
+/gate/source/interiorbox_hot_background/gps/pos/type         Volume
+/gate/source/interiorbox_hot_background/gps/pos/shape        Para
+/gate/source/interiorbox_hot_background/gps/pos/halfx        7. cm
+/gate/source/interiorbox_hot_background/gps/pos/halfy        3.85 cm
+/gate/source/interiorbox_hot_background/gps/pos/halfz        10.7 cm
+## Source parameters
+/gate/source/interiorbox_hot_background/setActivity    2497445.5 Bq
+/gate/source/interiorbox_hot_background/setType Ps
+/gate/source/interiorbox_hot_background/setPositroniumFractions 0.14 0.62833 0.00167 0.22721 0.00279
+/gate/source/interiorbox_hot_background/setPositroniumLifetimes 0.14 0.4 0.4 1.8 1.8 ns
+/gate/source/interiorbox_hot_background/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/interiorbox_hot_background/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/interiorbox_hot_background/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/interiorbox_hot_background/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/interiorbox_hot_background/gps/particle     gamma
+/gate/source/interiorbox_hot_background/gps/Forbid       sphere22
+/gate/source/interiorbox_hot_background/gps/Forbid       sphere22in
+/gate/source/interiorbox_hot_background/gps/Forbid       fill22
+/gate/source/interiorbox_hot_background/gps/Forbid       fill22in
+/gate/source/interiorbox_hot_background/gps/Forbid       sphere28
+/gate/source/interiorbox_hot_background/gps/Forbid       sphere28in
+/gate/source/interiorbox_hot_background/gps/Forbid       fill28
+/gate/source/interiorbox_hot_background/gps/Forbid       fill28in
+/gate/source/interiorbox_hot_background/dump             8
+
+/gate/source/addSource                        central_cylinder PositroniumSource
+/gate/source/central_cylinder/gps/pos/centre        0.0 0.0 0.0 cm
+/gate/source/central_cylinder/gps/pos/type          Volume
+/gate/source/central_cylinder/gps/pos/shape         Cylinder
+/gate/source/central_cylinder/gps/pos/radius        2.1 cm
+/gate/source/central_cylinder/gps/pos/halfz         10.7 cm
+## Source parameters
+/gate/source/central_cylinder/setActivity    148242.3 Bq
+/gate/source/central_cylinder/setType Ps
+/gate/source/central_cylinder/setPositroniumFractions 0.13 0.75796 0.00204 0.04729 0.0258 0.01875 0.00769 0.00071 0.0012 0.00325 0.00531
+/gate/source/central_cylinder/setPositroniumLifetimes 0.125 0.4 0.4 2.1 6.3 21 58 2.1 6.3 21 58 ns
+/gate/source/central_cylinder/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k2Gamma k2Gamma k2Gamma k3Gamma k3Gamma k3Gamma k3Gamma
+/gate/source/central_cylinder/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs kOrthoPs kOrthoPs kOrthoPs kOrthoPs kOrthoPs kOrthoPs
+/gate/source/central_cylinder/setPromptPhotonProbabilites 1 1 1 1 1 1 1 1 1 1 1
+/gate/source/central_cylinder/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 1.274 MeV
+/gate/source/central_cylinder/gps/particle     gamma
+
+
+# 10 mm Sphere
+/gate/source/addSource                        sphere10mm PositroniumSource
+/gate/source/sphere10mm/gps/pos/centre            2.86 4.95367 3.7 cm
+/gate/source/sphere10mm/gps/pos/type              Volume
+/gate/source/sphere10mm/gps/pos/shape             Sphere
+/gate/source/sphere10mm/gps/pos/radius            0.5 cm
+## Source parameters
+/gate/source/sphere10mm/setActivity    3351.0 Bq
+/gate/source/sphere10mm/setType Ps
+/gate/source/sphere10mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
+/gate/source/sphere10mm/setPositroniumLifetimes 0.152 0.42 0.42 2.54 2.54 ns
+/gate/source/sphere10mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/sphere10mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/sphere10mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/sphere10mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/sphere10mm/gps/particle          gamma
+
+
+# 10 mm Fill Capillary
+/gate/source/addSource                        capillary10mm PositroniumSource
+/gate/source/capillary10mm/gps/pos/centre         2.86 4.95367 7.5 cm
+/gate/source/capillary10mm/gps/pos/type           Volume
+/gate/source/capillary10mm/gps/pos/shape          Cylinder
+/gate/source/capillary10mm/gps/pos/radius         0.25 cm
+/gate/source/capillary10mm/gps/pos/halfz          3.2 cm
+## Source parameters
+/gate/source/capillary10mm/setActivity    1633.6 Bq
+/gate/source/capillary10mm/setType Ps
+/gate/source/capillary10mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
+/gate/source/capillary10mm/setPositroniumLifetimes 0.152 0.42 0.42 2.54 2.54 ns
+/gate/source/capillary10mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/capillary10mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/capillary10mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/capillary10mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/capillary10mm/gps/particle       gamma
+
+# 13 mm Sphere
+/gate/source/addSource                        sphere13mm             PositroniumSource
+/gate/source/sphere13mm/gps/pos/centre            -2.86 4.95367 3.7 cm
+/gate/source/sphere13mm/gps/pos/type              Volume
+/gate/source/sphere13mm/gps/pos/shape             Sphere
+/gate/source/sphere13mm/gps/pos/radius            0.65 cm
+## Source parameters
+/gate/source/sphere13mm/setActivity    7362.2 Bq
+/gate/source/sphere13mm/setType Ps
+/gate/source/sphere13mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
+/gate/source/sphere13mm/setPositroniumLifetimes 0.15 0.44 0.44 2.04 2.04 ns
+/gate/source/sphere13mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/sphere13mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/sphere13mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/sphere13mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/sphere13mm/gps/particle          gamma
+
+# 13 mm Fill Capillary
+/gate/source/addSource                        capillary13mm PositroniumSource
+/gate/source/capillary13mm/gps/pos/centre         -2.86 4.95367 7.5875 cm
+/gate/source/capillary13mm/gps/pos/type           Volume
+/gate/source/capillary13mm/gps/pos/shape          Cylinder
+/gate/source/capillary13mm/gps/pos/radius         0.25 cm
+/gate/source/capillary13mm/gps/pos/halfz          3.1125 cm
+## Source parameters
+/gate/source/capillary13mm/setActivity    1589.0 Bq
+/gate/source/capillary13mm/setType Ps
+/gate/source/capillary13mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
+/gate/source/capillary13mm/setPositroniumLifetimes 0.15 0.44 0.44 2.04 2.04 ns
+/gate/source/capillary13mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/capillary13mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/capillary13mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/capillary13mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/capillary13mm/gps/particle       gamma
+
+# 17 mm Sphere
+## Source parameters
+## Forbid
+
+# 17 mm Fill Capillary
+/gate/source/addSource                        capillary17mm PositroniumSource
+/gate/source/capillary17mm/gps/pos/centre         -5.72 0. 7.675 cm
+/gate/source/capillary17mm/gps/pos/type           Volume
+/gate/source/capillary17mm/gps/pos/shape          Cylinder
+/gate/source/capillary17mm/gps/pos/radius         0.25 cm
+/gate/source/capillary17mm/gps/pos/halfz          3.025 cm
+## Source parameters
+/gate/source/capillary17mm/setActivity    1544.3 Bq
+/gate/source/capillary17mm/setType Ps
+/gate/source/capillary17mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
+/gate/source/capillary17mm/setPositroniumLifetimes 0.15 0.44 0.44 2.04 2.04 ns
+/gate/source/capillary17mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/capillary17mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/capillary17mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/capillary17mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/capillary17mm/gps/particle       gamma
+
+# 22 mm Sphere
+/gate/source/addSource                        sphere22mm PositroniumSource
+/gate/source/sphere22mm/gps/pos/centre            -2.86 -4.95367 3.7 cm
+/gate/source/sphere22mm/gps/pos/type              Volume
+/gate/source/sphere22mm/gps/pos/shape             Sphere
+/gate/source/sphere22mm/gps/pos/radius            1.1 cm
+## Source parameters
+/gate/source/sphere22mm/setActivity    35681.8 Bq
+/gate/source/sphere22mm/setType Ps
+/gate/source/sphere22mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
+/gate/source/sphere22mm/setPositroniumLifetimes 0.152 0.42 0.42 2.54 2.54 ns
+/gate/source/sphere22mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/sphere22mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/sphere22mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/sphere22mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/sphere22mm/gps/particle          gamma
+
+# 22 mm Fill Capillary
+/gate/source/addSource                        capillary22mm PositroniumSource
+/gate/source/capillary22mm/gps/pos/centre         -2.86 -4.95367 7.8 cm
+/gate/source/capillary22mm/gps/pos/type           Volume
+/gate/source/capillary22mm/gps/pos/shape          Cylinder
+/gate/source/capillary22mm/gps/pos/radius         0.25 cm
+/gate/source/capillary22mm/gps/pos/halfz          2.9 cm
+## Source parameters
+/gate/source/capillary22mm/setActivity    1480.5 Bq
+/gate/source/capillary22mm/setType Ps
+/gate/source/capillary22mm/setPositroniumFractions 0.12 0.69313 0.00187 0.18169 0.00331
+/gate/source/capillary22mm/setPositroniumLifetimes 0.152 0.42 0.42 2.54 2.54 ns
+/gate/source/capillary22mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/capillary22mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/capillary22mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/capillary22mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/capillary22mm/gps/particle       gamma
+
+##########################################333
+
+# 28 mm Sphere
+/gate/source/addSource                        sphere28mm             PositroniumSource
+/gate/source/sphere28mm/gps/pos/centre            2.86 -4.95367 3.7 cm
+/gate/source/sphere28mm/gps/pos/type              Volume
+/gate/source/sphere28mm/gps/pos/shape             Sphere
+/gate/source/sphere28mm/gps/pos/radius            1.4 cm
+## Source parameters
+/gate/source/sphere28mm/setActivity    73561.9 Bq
+/gate/source/sphere28mm/setType Ps
+/gate/source/sphere28mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
+/gate/source/sphere28mm/setPositroniumLifetimes 0.15 0.44 0.44 2.04 2.04 ns
+/gate/source/sphere28mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/sphere28mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/sphere28mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/sphere28mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/sphere28mm/gps/particle          gamma
+
+# 28 mm Fill Capillary
+/gate/source/addSource                        capillary28mm PositroniumSource
+/gate/source/capillary28mm/gps/pos/centre         2.86 -4.95367 7.95 cm
+/gate/source/capillary28mm/gps/pos/type           Volume
+/gate/source/capillary28mm/gps/pos/shape          Cylinder
+/gate/source/capillary28mm/gps/pos/radius         0.25 cm
+/gate/source/capillary28mm/gps/pos/halfz          2.75 cm
+## Source parameters
+/gate/source/capillary28mm/setActivity    1403.9 Bq
+/gate/source/capillary28mm/setType Ps
+/gate/source/capillary28mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
+/gate/source/capillary28mm/setPositroniumLifetimes 0.15 0.44 0.44 2.04 2.04 ns
+/gate/source/capillary28mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/capillary28mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/capillary28mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/capillary28mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/capillary28mm/gps/particle       gamma
+
+# 37 mm Sphere
+## Source parameters
+## Forbid
+
+# 37 mm Fill Capillary
+/gate/source/addSource                        capillary37mm PositroniumSource
+/gate/source/capillary37mm/gps/pos/centre         5.72 0. 8.175 cm
+/gate/source/capillary37mm/gps/pos/type           Volume
+/gate/source/capillary37mm/gps/pos/shape          Cylinder
+/gate/source/capillary37mm/gps/pos/radius         0.25 cm
+/gate/source/capillary37mm/gps/pos/halfz          2.525 cm
+## Source parameters
+/gate/source/capillary37mm/setActivity    1289.0 Bq
+/gate/source/capillary37mm/setType Ps
+/gate/source/capillary37mm/setPositroniumFractions 0.092 0.76095 0.00205 0.14291 0.00209
+/gate/source/capillary37mm/setPositroniumLifetimes 0.15 0.44 0.44 2.04 2.04 ns
+/gate/source/capillary37mm/setDecayKinds k2Gamma k2Gamma k3Gamma k2Gamma k3Gamma
+/gate/source/capillary37mm/setPositronInteractions kParaPs kDirect kDirect kOrthoPs kOrthoPs
+/gate/source/capillary37mm/setPromptPhotonProbabilites 1 1 1 1 1
+/gate/source/capillary37mm/setPromptPhotonEnergies 1.274 1.274 1.274 1.274 1.274 MeV
+## Forbid
+/gate/source/capillary37mm/gps/particle       gamma
+
+
+/gate/source/list
+
+# END EXECUTE source.mac
+
+
+#  D A T A   O U T P U T
+# BEGIN EXECUTE output.mac
+/gate/output/analysis/disable  
+/gate/output/fastanalysis/disable  
+/gate/output/multianalysis/enable
+
+/gate/output/root/enable
+/gate/output/root/setFileName ../output/simulation_output-1
+
+/gate/output/root/setRootHitFlag 1
+/gate/output/root/setRootSinglesFlag 1
+
+/gate/output/multianalysis/verbose 1  
+/gate/output/multianalysis/describe
+
+# END EXECUTE output.mac
+
+
+#  R A N D O M   E N G I N E  A N D  S E E D
+# BEGIN EXECUTE random.mac
+/gate/random/setEngineName JamesRandom
+/gate/random/setEngineSeed 426405530
+
+/gate/random/verbose 1
+
+# END EXECUTE random.mac
+
+
+# S I M U L A T I O N
+# BEGIN EXECUTE application.mac
+/gate/application/setTimeSlice   1.0 s
+/gate/application/setTimeStart   0 s
+/gate/application/setTimeStop    1.0 s
+/gate/application/startDAQ
+
+# END EXECUTE application.mac

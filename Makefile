@@ -9,7 +9,7 @@
 SHELL := /bin/bash
 
 # Parent directory for worktrees and directory for lock files.
-WORKTREE_ROOT ?= ../worktrees
+WORKTREE_ROOT ?= ./worktrees
 WORKTREE_LOCKS_DIR ?= .tmp/worktree-locks
 
 .PHONY: init install install-user test lint format typecheck check worktree switch-to-worktree

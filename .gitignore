@@ -14,3 +14,4 @@ venv/
 examples/output/
 uv.lock
 .claude/
+worktrees/

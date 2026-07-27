@@ -1,0 +1,27 @@
+/gate/geometry/setMaterialDatabase    GateMaterials.db
+
+#==========================================================================================
+# Simulation world description
+# Below: simulation world as cube with a side length equal 300 cm
+#==========================================================================================
+
+/gate/world/geometry/setXLength 300. cm
+/gate/world/geometry/setYLength 300. cm
+/gate/world/geometry/setZLength 300. cm
+/gate/world/vis/setVisible 1 #To hide world's frame please set 0
+
+
+#==========================================================================================
+# Detector geometry
+# Below: Cylindrical detector (with name "detector") with inner radius equal 50 cm 
+# and outer radius equal 52 cm. Heights of this detector is 60 cm.
+#==========================================================================================
+
+/gate/world/daughters/name detector
+/gate/world/daughters/systemType scanner
+/gate/world/daughters/insert cylinder
+/gate/detector/setMaterial EJ230 
+/gate/detector/geometry/setRmin 50 cm
+/gate/detector/geometry/setRmax 52 cm
+/gate/detector/geometry/setHeight 60 cm
+/gate/detector/vis/setVisible 1 #To hide world's frame please set 0
