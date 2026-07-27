@@ -11,6 +11,8 @@ Public objects
 --------------
 Category
     Simulation section a command belongs to.
+EXECUTE_RE
+    Regular expression matching a ``/control/execute`` line.
 command_of
     Extract the command text of a line, or ``None`` for comments/blanks.
 CommandClassifier
@@ -18,6 +20,12 @@ CommandClassifier
 """
 
 import enum
+import re
+from typing import Final
+
+# A /control/execute line and its referenced macro file name. GATE accepts
+# leading indentation, so the anchor tolerates whitespace.
+EXECUTE_RE: Final[re.Pattern[str]] = re.compile(r"^\s*/control/execute\s+(\S+)\s*$")
 
 
 class Category(enum.Enum):
@@ -33,7 +41,7 @@ class Category(enum.Enum):
     OUTPUT = "output"
     RANDOM = "random"
     APPLICATION = "application"
-    VISUALISATION = "visualisation"
+    VISUALIZATION = "visualization"
     STRUCTURAL = "structural"
 
 
@@ -48,7 +56,7 @@ _PREFIX_CATEGORIES: dict[str, Category] = {
     "/gate/geometry": Category.GEOMETRY_COMMON,
     "/gate/systems": Category.DETECTOR,
     "/gate/run": Category.STRUCTURAL,
-    "/vis": Category.VISUALISATION,
+    "/vis": Category.VISUALIZATION,
     "/control": Category.STRUCTURAL,
 }
 
@@ -143,9 +151,12 @@ def _classify_volumes(lines: list[str]) -> dict[str, Category]:
     classes: dict[str, Category] = {}
     for volume, category in evidence.items():
         # Propagate evidence up the volume tree, stopping at the world and
-        # never overriding a volume that carries its own evidence.
+        # never overriding a volume that carries its own evidence. The
+        # visited set guards against parent cycles in malformed macros.
+        visited: set[str] = set()
         current: str | None = volume
-        while current is not None and current != "world":
+        while current is not None and current != "world" and current not in visited:
+            visited.add(current)
             classes.setdefault(current, evidence.get(current, category))
             current = parents.get(current)
     return classes

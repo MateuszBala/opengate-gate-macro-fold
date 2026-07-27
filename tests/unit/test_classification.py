@@ -37,7 +37,7 @@ def test_command_of_extracts_command_text(line: str, expected: str | None) -> No
         ("/gate/application/startDAQ", Category.APPLICATION),
         ("/gate/geometry/setMaterialDatabase GateMaterials.db", Category.GEOMETRY_COMMON),
         ("/gate/systems/cylindricalPET/rsector/attach rsector", Category.DETECTOR),
-        ("/vis/disable", Category.VISUALISATION),
+        ("/vis/disable", Category.VISUALIZATION),
         ("/control/execute other.mac", Category.STRUCTURAL),
         ("/gate/run/initialize", Category.STRUCTURAL),
         ("exit", Category.STRUCTURAL),
@@ -113,3 +113,18 @@ def test_classify_treats_unresolved_volume_as_geometry_common() -> None:
     assert classifier.classify("/gate/world/geometry/setXLength 300. cm") == (
         Category.GEOMETRY_COMMON
     )
+
+
+def test_classify_volumes_terminates_on_parent_cycle() -> None:
+    """A malformed macro with a volume-parent cycle must not hang classification."""
+    # Arrange
+    lines = [
+        "/gate/A/daughters/name A\n",
+        "/gate/A/attachCrystalSD\n",
+    ]
+
+    # Act
+    classifier = CommandClassifier(lines)
+
+    # Assert
+    assert classifier.classify("/gate/A/setMaterial Vacuum") == Category.DETECTOR
